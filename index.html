@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>R Stats Cheat Sheet — Labs 1–6</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0e0e0e;--paper:#f5f0e8;--paper2:#ede8dc;--paper3:#e2dbd0;
+  --red:#c0392b;--blue:#1a4a8a;--green:#1a6b3a;--amber:#8a5a00;
+  --purple:#5a1a8a;--teal:#0a5a6b;--orange:#8a3a00;
+  --code-bg:#1a1a2e;--code-text:#e8f0fe;
+  --fn:#7dd3fc;--kw:#c084fc;--num:#86efac;--str:#fde68a;--cmt:#64748b;
+  --border:#c8c0b0;--border-dark:#8a8070;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{font-size:11px;}
+body{
+  font-family:'Barlow',sans-serif;
+  background:var(--paper);
+  color:var(--ink);
+  line-height:1.4;
+}
+.page{
+  max-width:1380px;margin:0 auto;
+  padding:20px 22px 24px;
+}
+
+/* ─── HEADER ─── */
+.hdr{
+  display:grid;grid-template-columns:1fr auto;
+  align-items:end;
+  padding-bottom:10px;
+  margin-bottom:14px;
+  border-bottom:3px double var(--ink);
+  gap:20px;
+}
+.hdr-left h1{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:32px;font-weight:800;
+  letter-spacing:-0.5px;
+  line-height:1;
+}
+.hdr-left h1 em{color:var(--red);font-style:normal;}
+.hdr-sub{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;color:#555;margin-top:3px;letter-spacing:0.3px;
+}
+.lab-pills{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;}
+.lp{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:10px;font-weight:700;letter-spacing:0.5px;
+  padding:2px 9px;border-radius:2px;text-transform:uppercase;
+  border:1.5px solid;
+}
+
+/* ─── LAYOUT ─── */
+.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.span2{grid-column:span 2;}
+.span3{grid-column:span 3;}
+.span4{grid-column:span 4;}
+
+.sec-label{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
+  padding:3px 10px;margin:12px 0 7px;
+  display:inline-block;
+}
+
+/* ─── CARD ─── */
+.card{
+  border:1.5px solid var(--border-dark);
+  border-radius:3px;
+  overflow:hidden;
+  background:white;
+}
+.card-h{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11.5px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
+  padding:4px 8px 3px;
+  display:flex;align-items:center;gap:5px;
+  border-bottom:1.5px solid var(--border-dark);
+}
+.card-b{padding:7px 8px;}
+
+/* ─── COLOR ACCENTS ─── */
+.red  .card-h{background:var(--red);color:white;}
+.blue .card-h{background:var(--blue);color:white;}
+.green.card-h{background:var(--green);color:white;}
+.amber.card-h{background:var(--amber);color:white;}
+.purple.card-h{background:var(--purple);color:white;}
+.teal .card-h{background:var(--teal);color:white;}
+.orange.card-h{background:var(--orange);color:white;}
+
+.red   {border-color:var(--red);}
+.blue  {border-color:var(--blue);}
+.green {border-color:var(--green);}
+.amber {border-color:var(--amber);}
+.purple{border-color:var(--purple);}
+.teal  {border-color:var(--teal);}
+.orange{border-color:var(--orange);}
+
+/* ─── CODE ─── */
+.cb{
+  background:var(--code-bg);
+  border-radius:2px;
+  padding:6px 8px;margin:4px 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;line-height:1.75;
+  color:var(--code-text);
+}
+.fn{color:var(--fn);}
+.kw{color:var(--kw);}
+.num{color:var(--num);}
+.str{color:var(--str);}
+.cmt{color:var(--cmt);font-style:italic;}
+.hi{color:#fbbf24;font-weight:600;}
+code{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;
+  background:#e8e0d4;
+  padding:0px 4px;border-radius:2px;
+  color:var(--blue);
+}
+
+/* ─── FORMULA BOX ─── */
+.fx{
+  background:var(--paper2);
+  border:1px solid var(--border);
+  border-left:3px solid;
+  border-radius:2px;
+  padding:5px 8px;margin:4px 0;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9.5px;line-height:1.8;
+}
+.fx-lbl{font-size:8.5px;color:#666;font-family:'Barlow',sans-serif;font-style:italic;}
+
+/* ─── TABLE ─── */
+table{width:100%;border-collapse:collapse;font-size:10px;}
+th{
+  background:var(--paper3);
+  padding:3px 6px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;
+  text-align:left;border-bottom:1.5px solid var(--border-dark);
+}
+td{padding:3px 6px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+.mono{font-family:'IBM Plex Mono',monospace;font-size:9px;}
+.bold{font-weight:600;}
+.red-t{color:var(--red);}
+.blue-t{color:var(--blue);}
+.green-t{color:var(--green);}
+
+/* ─── TAGS ─── */
+.d-tag{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
+.p-tag{background:#dcfce7;color:#166534;border:1px solid #86efac;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
+.q-tag{background:#fef9c3;color:#854d0e;border:1px solid #fde047;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
+.r-tag{background:#f3e8ff;color:#6b21a8;border:1px solid #d8b4fe;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
+
+/* ─── ALERT ROWS ─── */
+.alert{
+  display:flex;align-items:flex-start;gap:5px;
+  padding:4px 7px;margin:3px 0;border-radius:2px;
+  font-size:10px;line-height:1.45;
+}
+.alert-r{background:#fff0f0;border-left:3px solid var(--red);}
+.alert-b{background:#eef4ff;border-left:3px solid var(--blue);}
+.alert-g{background:#f0fff4;border-left:3px solid var(--green);}
+.alert-y{background:#fffbeb;border-left:3px solid #d97706;}
+.alert-icon{font-size:11px;flex-shrink:0;margin-top:1px;}
+
+/* ─── KV rows ─── */
+.kv{display:flex;justify-content:space-between;align-items:baseline;padding:2.5px 0;border-bottom:1px dashed var(--border);}
+.kv:last-child{border-bottom:none;}
+.kv-k{color:#444;font-size:10px;}
+.kv-v{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:var(--blue);}
+
+/* ─── DIVIDER ─── */
+.div-row{
+  display:flex;align-items:center;gap:8px;
+  margin:10px 0 7px;
+}
+.div-line{flex:1;height:1px;background:var(--border-dark);}
+.div-txt{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
+  color:white;padding:2px 12px;border-radius:1px;white-space:nowrap;
+}
+
+@media print{
+  body{background:var(--paper)!important;}
+  .page{padding:10px 14px;}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ═══ HEADER ═══ -->
+<div class="hdr">
+  <div class="hdr-left">
+    <h1>R Statistics <em>Cheat Sheet</em></h1>
+    <div class="hdr-sub">LABS 1–6 · Distributions · Moments · Functions · Graphics · Simulation · Exam Ready</div>
+  </div>
+  <div class="lab-pills">
+    <div class="lp" style="color:var(--blue);border-color:var(--blue)">Lab 1 · Vectors & Stats</div>
+    <div class="lp" style="color:var(--green);border-color:var(--green)">Lab 2 · Graphics</div>
+    <div class="lp" style="color:var(--amber);border-color:var(--amber)">Lab 3 · Functions</div>
+    <div class="lp" style="color:var(--red);border-color:var(--red)">Lab 4 · Moments</div>
+    <div class="lp" style="color:var(--purple);border-color:var(--purple)">Lab 5 · Binomial & Poisson</div>
+    <div class="lp" style="color:var(--teal);border-color:var(--teal)">Lab 6 · NegBin & Geometric</div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1: THE d/p/q/r PATTERN ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--blue)">① The d / p / q / r Pattern — Master This First</div><div class="div-line"></div></div>
+<div class="cols4">
+
+  <div class="card blue">
+    <div class="card-h">🎯 4 Functions for Every Distribution</div>
+    <div class="card-b">
+      <table>
+        <tr><th>Prefix</th><th>Returns</th><th>Use When</th></tr>
+        <tr><td><span class="d-tag">d___</span></td><td>P(X = x) — exact</td><td>"exactly x"</td></tr>
+        <tr><td><span class="p-tag">p___</span></td><td>P(X ≤ x) — CDF</td><td>"at most x"</td></tr>
+        <tr><td><span class="q-tag">q___</span></td><td>Smallest x: CDF ≥ p</td><td>percentile/quantile</td></tr>
+        <tr><td><span class="r-tag">r___</span></td><td>N random samples</td><td>simulate experiment</td></tr>
+      </table>
+      <div class="alert alert-y" style="margin-top:5px">
+        <span class="alert-icon">💡</span>
+        <span><b>Tail shortcuts:</b><br>
+        P(X &gt; x) = <code>1 − p___(x)</code><br>
+        P(X ≥ x) = <code>1 − p___(x−1)</code><br>
+        P(a ≤ X ≤ b) = <code>p___(b) − p___(a−1)</code></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-h">🪙 Binomial — Bin(n, p)</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--purple)">P(X=x) = C(n,x)·pˣ·(1−p)^(n−x)<br><span class="fx-lbl">Mean = np · Var = np(1−p) · x = 0..n</span></div>
+      <div class="cb">
+<span class="fn">dbinom</span>(<span class="num">x</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># P(X = x)</span>
+<span class="fn">pbinom</span>(<span class="num">x</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># P(X ≤ x)</span>
+<span class="fn">qbinom</span>(<span class="num">0.5</span>,<span class="num">n</span>,<span class="num">p</span>)   <span class="cmt"># median</span>
+<span class="fn">rbinom</span>(<span class="num">N</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># simulate</span></div>
+      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>Use only when: fixed <b>n</b>, independent trials, constant <b>p</b>, exactly 2 outcomes</span></div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-h">📞 Poisson — Pois(λ)</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--green)">P(X=x) = e^(−λ) · λˣ / x!<br><span class="fx-lbl">Mean = λ · Var = λ · x = 0,1,2,...∞</span></div>
+      <div class="cb">
+<span class="fn">dpois</span>(<span class="num">x</span>, <span class="num">lam</span>)   <span class="cmt"># P(X = x)</span>
+<span class="fn">ppois</span>(<span class="num">x</span>, <span class="num">lam</span>)   <span class="cmt"># P(X ≤ x)</span>
+<span class="fn">qpois</span>(<span class="num">0.9</span>,<span class="num">lam</span>)  <span class="cmt"># 90th pctile</span>
+<span class="fn">rpois</span>(<span class="num">N</span>, <span class="num">lam</span>)   <span class="cmt"># simulate</span></div>
+      <div class="alert alert-y"><span class="alert-icon">⚡</span><span><b>Rate scaling:</b> 6 calls/5min → per 1min: λ = 6/5 = 1.2. Always match λ to the time window asked!</span></div>
+    </div>
+  </div>
+
+  <div class="card teal">
+    <div class="card-h">🎲 NegBin & Geometric</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--teal)">NegBin: C(x+k−1,k−1)·pᵏ·qˣ<br><span class="fx-lbl">X = FAILURES before k successes · Mean=kq/p · Var=kq/p²</span><br>Geom (k=1): qˣ·p<br><span class="fx-lbl">Mean=q/p · Var=q/p²</span></div>
+      <div class="cb">
+<span class="fn">dnbinom</span>(<span class="num">x</span>,<span class="num">k</span>,<span class="num">p</span>)  <span class="cmt"># x = failures</span>
+<span class="fn">pnbinom</span>(<span class="num">x</span>,<span class="num">k</span>,<span class="num">p</span>)  <span class="cmt"># P(X ≤ x)</span>
+<span class="fn">dgeom</span>(<span class="num">x</span>, <span class="num">p</span>)    <span class="cmt"># Geom P(X=x)</span>
+<span class="fn">pgeom</span>(<span class="num">x</span>, <span class="num">p</span>)    <span class="cmt"># Geom CDF</span></div>
+      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>R counts <b>failures</b>. "kth success on nth trial" → pass <b>n−k</b> as x, not n</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SECTION 2: KEYWORD DECODER + WHICH DISTRIBUTION ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--red)">② Translate Problem Words → R Code</div><div class="div-line"></div></div>
+<div class="cols3">
+
+  <div class="card red span2">
+    <div class="card-h">🔑 Keyword → Formula Decoder</div>
+    <div class="card-b">
+      <table>
+        <tr><th>Problem says…</th><th>Means</th><th style="width:44%">R Code</th></tr>
+        <tr><td>"<b>exactly</b> x" / "precisely x"</td><td class="mono red-t">P(X = x)</td><td><code>d___(x, ...)</code></td></tr>
+        <tr><td>"<b>at most</b> x" / "no more than" / "≤ x"</td><td class="mono blue-t">P(X ≤ x)</td><td><code>p___(x, ...)</code></td></tr>
+        <tr><td>"<b>at least</b> x" / "no fewer than" / "≥ x"</td><td class="mono green-t">1 − P(X ≤ x−1)</td><td><code>1 - p___(x-1, ...)</code></td></tr>
+        <tr><td>"<b>more than</b> x" / "greater than" / "&gt; x"</td><td class="mono green-t">1 − P(X ≤ x)</td><td><code>1 - p___(x, ...)</code></td></tr>
+        <tr><td>"<b>fewer than</b> x" / "less than" / "&lt; x"</td><td class="mono blue-t">P(X ≤ x−1)</td><td><code>p___(x-1, ...)</code></td></tr>
+        <tr><td>"<b>between a and b inclusive</b>"</td><td class="mono">P(X≤b) − P(X≤a−1)</td><td><code>p___(b,...) - p___(a-1,...)</code></td></tr>
+        <tr><td>"<b>between a and b exclusive</b>"</td><td class="mono">P(X≤b−1) − P(X≤a)</td><td><code>p___(b-1,...) - p___(a,...)</code></td></tr>
+        <tr><td>"<b>k</b>th success on <b>n</b>th trial" (NegBin)</td><td class="mono red-t">x = n − k failures</td><td><code>dnbinom(n-k, k, p)</code></td></tr>
+        <tr><td>"<b>first</b> success on <b>n</b>th trial" (Geom)</td><td class="mono red-t">x = n − 1 failures</td><td><code>dgeom(n-1, p)</code></td></tr>
+        <tr><td>"<b>wins series</b>" first to k wins (best of 2k−1)</td><td class="mono">Sum dnbinom(0..k−1,k,p)</td><td><code>pnbinom(k-1, k, p)</code></td></tr>
+        <tr><td>"minimum <b>n</b> so P(≥1 success)&gt; threshold"</td><td class="mono">Solve (1−p)ⁿ &lt; 1−threshold</td><td><code>ceiling(log(1-thr)/log(1-p))</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card amber">
+    <div class="card-h">🧭 Which Distribution?</div>
+    <div class="card-b">
+      <div class="kv"><span class="kv-k">Fixed n trials, count successes</span><span class="kv-v">Binomial</span></div>
+      <div class="kv"><span class="kv-k">Count events in time/space (know avg rate)</span><span class="kv-v">Poisson</span></div>
+      <div class="kv"><span class="kv-k">Failures before k-th success</span><span class="kv-v">NegBin</span></div>
+      <div class="kv"><span class="kv-k">Failures before 1st success</span><span class="kv-v">Geometric</span></div>
+      <div class="kv"><span class="kv-k">n large, p small, np = λ moderate</span><span class="kv-v">Poisson ≈ Binom</span></div>
+      <div class="kv"><span class="kv-k">Waiting time between events (continuous)</span><span class="kv-v">Exponential</span></div>
+      <div class="kv"><span class="kv-k">Symmetric bell, continuous data</span><span class="kv-v">Normal</span></div>
+      <div class="alert alert-r" style="margin-top:6px"><span class="alert-icon">⚠</span><span>Poisson approx valid: n&gt;30, p&lt;0.05, np&lt;10</span></div>
+      <div class="alert alert-g"><span class="alert-icon">✔</span><span>Always check: probabilities sum to 1? Mean matches np or λ?</span></div>
+      <div class="alert alert-b"><span class="alert-icon">🏆</span><span><b>Championship series</b> = NegBin, NOT Binomial over all games</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SECTION 3: EXPECTATIONS & MOMENTS ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--green)">③ Expectations, Variance & Moments (Lab 4)</div><div class="div-line"></div></div>
+<div class="cols4">
+
+  <div class="card green">
+    <div class="card-h">⚖ Expected Value E(X)</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--green)">Discrete: E(X) = Σ x · P(X=x)<br>Continuous: E(X) = ∫ x · f(x) dx<br><span class="fx-lbl">E(X²) → replace x with x²  ·  E[g(X)] → replace x with g(x)</span></div>
+      <div class="cb">
+<span class="cmt"># Discrete</span>
+<span class="hi">ex &lt;- <span class="fn">sum</span>(x * probs)</span>
+<span class="fn">weighted.mean</span>(x, p)  <span class="cmt"># same</span>
+<span class="cmt"># Continuous</span>
+<span class="fn">integrate</span>(<span class="kw">function</span>(x) x*f(x),
+          a, b)$value</div>
+    </div>
+  </div>
+
+  <div class="card red">
+    <div class="card-h">📊 Variance & Std Dev</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--red)">Var(X) = E(X²) − [E(X)]² ← use this<br>Also: E[(X−μ)²] ← same thing<br>σ = √Var(X)</div>
+      <div class="cb">
+ex  &lt;- <span class="fn">sum</span>(x * p)
+ex2 &lt;- <span class="fn">sum</span>(x^<span class="num">2</span> * p)
+<span class="hi">varx &lt;- ex2 - ex^<span class="num">2</span></span>
+<span class="cmt"># OR equivalently:</span>
+varx &lt;- <span class="fn">weighted.mean</span>(
+  (x - ex)^<span class="num">2</span>, p)</div>
+      <div class="alert alert-y"><span class="alert-icon">💡</span><span>For Continuous: <code>integrate(function(x) x^2*f(x),a,b)$value - ex^2</code></span></div>
+    </div>
+  </div>
+
+  <div class="card amber">
+    <div class="card-h">📐 rth Moment — General</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--amber)">μ'ᵣ = E(Xʳ) = ∫ xʳ · f(x) dx<br><span class="fx-lbl">r=1: mean · r=2: feeds variance · r=3: skewness</span></div>
+      <div class="cb">
+<span class="cmt"># Continuous rth moment</span>
+moment &lt;- <span class="kw">function</span>(f, r, a, b){
+  <span class="fn">integrate</span>(<span class="kw">function</span>(x) x^r*f(x),
+            a, b)$value
+}
+<span class="cmt"># Discrete rth moment</span>
+<span class="fn">sum</span>(x^r * <span class="fn">dbinom</span>(x, n, p))</div>
+      <div class="alert alert-b"><span class="alert-icon">📌</span><span>Exponential rth moment = <b>r! / λʳ</b></span></div>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-h">📋 Mean & Variance by Distribution</div>
+    <div class="card-b">
+      <table>
+        <tr><th>Distribution</th><th>Mean</th><th>Variance</th></tr>
+        <tr><td>Binomial(n,p)</td><td class="mono bold blue-t">np</td><td class="mono">np(1−p)</td></tr>
+        <tr><td>Poisson(λ)</td><td class="mono bold blue-t">λ</td><td class="mono">λ</td></tr>
+        <tr><td>Geometric(p)</td><td class="mono bold blue-t">q/p</td><td class="mono">q/p²</td></tr>
+        <tr><td>NegBin(k,p)</td><td class="mono bold blue-t">kq/p</td><td class="mono">kq/p²</td></tr>
+        <tr><td>Exponential(λ)</td><td class="mono bold blue-t">1/λ</td><td class="mono">1/λ²</td></tr>
+        <tr><td>Normal(μ,σ²)</td><td class="mono bold blue-t">μ</td><td class="mono">σ²</td></tr>
+      </table>
+      <div class="alert alert-r" style="margin-top:4px"><span class="alert-icon">⚠</span><span>Poisson: Mean = Variance = λ. If these differ, it's not Poisson.</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SECTION 4: FUNCTIONS, CALCULUS, LOOPS ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--amber)">④ Functions · Calculus · Loops · Conditionals (Lab 3)</div><div class="div-line"></div></div>
+<div class="cols4">
+
+  <div class="card amber">
+    <div class="card-h">⚙ Writing Functions</div>
+    <div class="card-b">
+      <div class="cb">
+<span class="fn">my_fn</span> &lt;- <span class="kw">function</span>(a, b=<span class="num">2</span>) {
+  result &lt;- a + b
+  <span class="kw">return</span>(result)  <span class="cmt"># explicit</span>
+}
+<span class="fn">my_fn</span>(<span class="num">5</span>)      <span class="cmt"># b=2 (default) → 7</span>
+<span class="fn">my_fn</span>(<span class="num">5</span>, <span class="num">3</span>)   <span class="cmt"># b=3 → 8</span>
+<span class="cmt"># Nested function (closure)</span>
+outer &lt;- <span class="kw">function</span>(lam, r) {
+  <span class="fn">integrate</span>(<span class="kw">function</span>(x) x^r*
+    lam*<span class="fn">exp</span>(-lam*x), <span class="num">0</span>, <span class="fn">Inf</span>)$value
+}</div>
+    </div>
+  </div>
+
+  <div class="card teal">
+    <div class="card-h">∂ Calculus in R (Lab 3)</div>
+    <div class="card-b">
+      <div class="cb">
+<span class="cmt"># Symbolic derivative (base R)</span>
+f &lt;- <span class="fn">expression</span>(x^<span class="num">2</span>+<span class="num">3</span>*x+<span class="num">5</span>)
+fp &lt;- <span class="fn">D</span>(f, <span class="str">"x"</span>)     <span class="cmt"># → 2*x+3</span>
+<span class="fn">eval</span>(fp, <span class="fn">list</span>(x=<span class="num">2</span>))  <span class="cmt"># = 7</span>
+<span class="cmt"># Deriv package (returns function)</span>
+library(Deriv)
+fp &lt;- <span class="fn">Deriv</span>(f, <span class="str">"x"</span>)
+fp(<span class="num">2</span>)  <span class="cmt"># = 7  ← callable!</span>
+<span class="cmt"># Root finding</span>
+<span class="fn">uniroot</span>(f, c(<span class="num">0</span>,<span class="num">3</span>))$root
+<span class="cmt"># Integration</span>
+<span class="fn">integrate</span>(f, <span class="num">0</span>, <span class="fn">Inf</span>)$value</div>
+    </div>
+  </div>
+
+  <div class="card red">
+    <div class="card-h">🔁 Loops & Conditionals</div>
+    <div class="card-b">
+      <div class="cb">
+<span class="cmt"># if / else if / else</span>
+<span class="kw">if</span> (x &lt; <span class="num">0</span>)       { <span class="str">"neg"</span> }
+<span class="kw">else if</span> (x==<span class="num">0</span>)  { <span class="str">"zero"</span> }
+<span class="kw">else</span>             { <span class="str">"pos"</span> }
+<span class="cmt"># for loop</span>
+<span class="kw">for</span> (i <span class="kw">in</span> <span class="num">1</span>:<span class="num">5</span>) { <span class="fn">print</span>(i) }
+<span class="cmt"># while loop</span>
+i &lt;- <span class="num">1</span>
+<span class="kw">while</span> (i &lt; <span class="num">6</span>) { <span class="fn">print</span>(i); i &lt;- i+<span class="num">1</span> }
+<span class="cmt"># Apply fn to vector (vectorize!)</span>
+<span class="fn">sapply</span>(<span class="num">-5</span>:<span class="num">5</span>, my_fn)</div>
+    </div>
+  </div>
+
+  <div class="card purple">
+    <div class="card-h">🧮 Bayes' Theorem</div>
+    <div class="card-b">
+      <div class="fx" style="border-color:var(--purple)">P(A|D) = P(D|A)·P(A) / P(D)<br><span class="fx-lbl">P(D) = Σ P(D|Aᵢ)·P(Aᵢ) — total probability</span></div>
+      <div class="cb">
+p_prior &lt;- <span class="fn">c</span>(<span class="num">.15</span>,<span class="num">.35</span>,<span class="num">.50</span>)
+p_lik   &lt;- <span class="fn">c</span>(<span class="num">.01</span>,<span class="num">.05</span>,<span class="num">.02</span>)
+joint   &lt;- p_prior * p_lik
+<span class="hi">post    &lt;- joint / <span class="fn">sum</span>(joint)</span>
+<span class="cmt"># post[i] = P(factory i | defective)</span></div>
+      <div class="alert alert-b"><span class="alert-icon">📌</span><span><code>joint / sum(joint)</code> is the one-liner for full Bayes posteriors</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SECTION 5: GRAPHICS + DESCRIPTIVE STATS ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--purple)">⑤ Graphics · Descriptive Statistics (Labs 1 & 2)</div><div class="div-line"></div></div>
+<div class="cols3">
+
+  <div class="card purple">
+    <div class="card-h">📈 Plot Functions Quick Ref</div>
+    <div class="card-b">
+      <table>
+        <tr><th>Chart type</th><th>Function</th><th>Key args</th></tr>
+        <tr><td>Scatter / Line</td><td><code>plot(x,y)</code></td><td><code>type='l','p','h','o'</code></td></tr>
+        <tr><td>Bar chart</td><td><code>barplot(h)</code></td><td><code>names.arg, beside</code></td></tr>
+        <tr><td>Histogram</td><td><code>hist(x)</code></td><td><code>breaks, freq</code></td></tr>
+        <tr><td>Boxplot</td><td><code>boxplot(x,y)</code></td><td><code>notch, horizontal</code></td></tr>
+        <tr><td>Pie chart</td><td><code>pie(x, labels)</code></td><td><code>col, radius</code></td></tr>
+        <tr><td>Dot chart</td><td><code>dotchart(x,l)</code></td><td><code>xlab, pch</code></td></tr>
+        <tr><td>Multi-curve</td><td><code>lines(x,y)</code></td><td>adds to existing plot</td></tr>
+        <tr><td>Multi-plot</td><td><code>par(mfrow=c(r,c))</code></td><td>reset: <code>c(1,1)</code></td></tr>
+      </table>
+      <div class="cb" style="margin-top:5px">
+<span class="fn">abline</span>(v=<span class="num">5</span>, lty=<span class="num">2</span>, col=<span class="str">"red"</span>) <span class="cmt"># vert line</span>
+<span class="fn">abline</span>(h=<span class="num">0</span>)                    <span class="cmt"># horiz baseline</span>
+<span class="fn">legend</span>(<span class="str">"topright"</span>, legend, col, lwd)
+<span class="fn">title</span>(main=<span class="str">"My Plot"</span>, xlab, ylab)</div>
+    </div>
+  </div>
+
+  <div class="card blue">
+    <div class="card-h">🔢 Descriptive Stats — Lab 1</div>
+    <div class="card-b">
+      <div class="cb">
+<span class="fn">mean</span>(x); <span class="fn">median</span>(x); <span class="fn">sd</span>(x)
+<span class="fn">var</span>(x);  <span class="fn">sum</span>(x);  <span class="fn">length</span>(x)
+<span class="fn">min</span>(x);  <span class="fn">max</span>(x);  <span class="fn">range</span>(x)
+<span class="fn">IQR</span>(x)            <span class="cmt"># Q3 − Q1</span>
+<span class="fn">quantile</span>(x, <span class="num">0.25</span>) <span class="cmt"># any %ile</span>
+<span class="fn">summary</span>(x)        <span class="cmt"># 5-num summary</span>
+<span class="fn">table</span>(x)          <span class="cmt"># frequency table</span>
+<span class="fn">sort</span>(x); <span class="fn">rank</span>(x)  <span class="cmt"># order/rank</span>
+<span class="fn">cor</span>(x, y)         <span class="cmt"># correlation</span></div>
+      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>Boxplot outlier: beyond Q1−1.5·IQR or Q3+1.5·IQR</span></div>
+      <div class="alert alert-y"><span class="alert-icon">💡</span><span>Skewed right: mean &gt; median. Skewed left: mean &lt; median.</span></div>
+    </div>
+  </div>
+
+  <div class="card orange">
+    <div class="card-h">🎰 Sampling & Key Idioms</div>
+    <div class="card-b">
+      <div class="cb">
+<span class="fn">sample</span>(data, n, replace=<span class="kw">F</span>)
+<span class="fn">set.seed</span>(<span class="num">42</span>)    <span class="cmt"># reproducible</span>
+<span class="fn">rep</span>(<span class="str">"A"</span>, <span class="num">10</span>)    <span class="cmt"># repeat 10×</span>
+<span class="fn">seq</span>(<span class="num">0</span>,<span class="num">1</span>,<span class="num">0.01</span>)  <span class="cmt"># fine grid</span>
+<span class="fn">choose</span>(<span class="num">n</span>, <span class="num">k</span>)    <span class="cmt"># C(n,k)</span>
+<span class="fn">factorial</span>(<span class="num">5</span>)   <span class="cmt"># 5! = 120</span>
+<span class="fn">exp</span>(<span class="num">-2</span>)         <span class="cmt"># e^(−2)</span>
+<span class="fn">log</span>(x)          <span class="cmt"># ln(x)</span>
+<span class="fn">ceiling</span>(x)      <span class="cmt"># round UP</span>
+<span class="fn">floor</span>(x)        <span class="cmt"># round DOWN</span>
+<span class="fn">paste</span>(<span class="str">"x ="</span>, x) <span class="cmt"># join strings</span>
+<span class="fn">cat</span>(<span class="str">"x ="</span>, x, <span class="str">"\n"</span>) <span class="cmt"># print clean</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ SECTION 6: TRICKY PATTERNS & HARD PROBLEM CHECKLIST ═══ -->
+<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--red)">⑥ Common Mistakes · Tricky Patterns · Hard Problem Checklist</div><div class="div-line"></div></div>
+<div class="cols2">
+
+  <div class="card red">
+    <div class="card-h">🔴 Common Mistakes & Traps</div>
+    <div class="card-b">
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Wrong Poisson λ for interval:</b> 6 calls/5min asked for 1 min → λ=6/5×1=1.2, not 6. Recalculate λ = rate×interval for every question.</span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>NegBin: passing total trials not failures:</b> "4th success on 9th trial" → 5 failures, use <code>dnbinom(5,4,p)</code>, NOT <code>dnbinom(9,4,p)</code></span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Geometric X=0 means 1st trial succeeds:</b> <code>dgeom(0,p) = p</code>. "First success on 3rd call" → 2 failures → <code>dgeom(2,p)</code></span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Using Binomial for a series:</b> "Win series in 6 games" is NegBin (fixed wins, variable games), not Binomial (fixed games, variable wins).</span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Plotting piecewise with if():</b> <code>if()</code> is not vectorized. Use <code>sapply(x_vec, f)</code> to apply a scalar function across a vector for plotting.</span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Not verifying pdf:</b> Before computing E(X), always check <code>integrate(f, lower, upper)$value == 1</code>. If not 1, your f is wrong.</span></div>
+      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>"At least once" minimum n:</b> P(X≥1) = 1−(1−p)ⁿ &gt; threshold → solve: n &gt; log(1−threshold)/log(1−p). Use <code>ceiling()</code> for the answer.</span></div>
+    </div>
+  </div>
+
+  <div class="card green">
+    <div class="card-h">✅ Hard Problem Step-by-Step Checklist</div>
+    <div class="card-b">
+      <div class="alert alert-g"><span class="alert-icon">1️⃣</span><span><b>Identify what's fixed vs. what's random.</b> Fixed n & count successes → Binomial. Fixed target successes & count failures → NegBin. Count events in interval → Poisson.</span></div>
+      <div class="alert alert-g"><span class="alert-icon">2️⃣</span><span><b>Match the parameterization.</b> Does R use the same convention as the problem? NegBin in R = failures. Geometric in R = failures (x=0 is valid). Adjust accordingly.</span></div>
+      <div class="alert alert-g"><span class="alert-icon">3️⃣</span><span><b>Decode the probability phrase.</b> Use the keyword decoder above to turn "at least / fewer than / between" into the correct d/p function and whether to add/subtract 1.</span></div>
+      <div class="alert alert-g"><span class="alert-icon">4️⃣</span><span><b>Scale rates for Poisson.</b> Confirm your λ matches the exact time/space interval asked. Rescale: λ_new = λ_given × (target interval / given interval).</span></div>
+      <div class="alert alert-g"><span class="alert-icon">5️⃣</span><span><b>For moment problems:</b> Define f(x), verify integral = 1, then compute E(X) = integrate(x·f(x)), Var = E(X²)−E(X)². Use closure functions for general rth moment.</span></div>
+      <div class="alert alert-g"><span class="alert-icon">6️⃣</span><span><b>Sanity check your answer.</b> Probability must be between 0 and 1. Mean should match n·p or λ. Sum of full PMF = 1. If simulating, verify sim mean ≈ theoretical mean.</span></div>
+      <div class="alert alert-b" style="margin-top:4px"><span class="alert-icon">⭐</span><span><b>Bonus — Bayes structure:</b> Always = (likelihood × prior) / total. "Given defective" problems always follow this pattern. One line: <code>post = joint/sum(joint)</code></span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div style="margin-top:12px;padding-top:8px;border-top:2px double var(--ink);display:flex;justify-content:space-between;align-items:center">
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">R Statistics · Labs 1–6 · Distributions · Moments · Calculus · Graphics</span>
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">d=exact P(X=x) · p=cumulative P(X≤x) · q=quantile · r=random · Var = E(X²)−[E(X)]²</span>
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">q=1−p · Geom=NegBin(k=1) · Poisson approx Binom when n large, p small</span>
+</div>
+
+</div>
+</body>
+</html>
