@@ -2,572 +2,1282 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>R Stats Cheat Sheet — Labs 1–6</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,400;0,600;1,400&family=Barlow+Condensed:wght@400;600;700;800&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarqon Intelligence</title>
 <style>
-:root{
-  --ink:#0e0e0e;--paper:#f5f0e8;--paper2:#ede8dc;--paper3:#e2dbd0;
-  --red:#c0392b;--blue:#1a4a8a;--green:#1a6b3a;--amber:#8a5a00;
-  --purple:#5a1a8a;--teal:#0a5a6b;--orange:#8a3a00;
-  --code-bg:#1a1a2e;--code-text:#e8f0fe;
-  --fn:#7dd3fc;--kw:#c084fc;--num:#86efac;--str:#fde68a;--cmt:#64748b;
-  --border:#c8c0b0;--border-dark:#8a8070;
-}
-*{margin:0;padding:0;box-sizing:border-box;}
-html{font-size:11px;}
-body{
-  font-family:'Barlow',sans-serif;
-  background:var(--paper);
-  color:var(--ink);
-  line-height:1.4;
-}
-.page{
-  max-width:1380px;margin:0 auto;
-  padding:20px 22px 24px;
-}
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600&display=swap');
 
-/* ─── HEADER ─── */
-.hdr{
-  display:grid;grid-template-columns:1fr auto;
-  align-items:end;
-  padding-bottom:10px;
-  margin-bottom:14px;
-  border-bottom:3px double var(--ink);
-  gap:20px;
-}
-.hdr-left h1{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:32px;font-weight:800;
-  letter-spacing:-0.5px;
-  line-height:1;
-}
-.hdr-left h1 em{color:var(--red);font-style:normal;}
-.hdr-sub{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9.5px;color:#555;margin-top:3px;letter-spacing:0.3px;
-}
-.lab-pills{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;}
-.lp{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:10px;font-weight:700;letter-spacing:0.5px;
-  padding:2px 9px;border-radius:2px;text-transform:uppercase;
-  border:1.5px solid;
-}
+  :root {
+    --black: #0a0a0a;
+    --white: #f4f2ee;
+    --off: #111111;
+    --off2: #161616;
+    --rule: rgba(244,242,238,0.09);
+    --rule-bright: rgba(244,242,238,0.2);
+    --muted: #888880;
+    --dim: #3e3e3a;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'Barlow', sans-serif;
+  }
 
-/* ─── LAYOUT ─── */
-.cols4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
-.cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.cols2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.span2{grid-column:span 2;}
-.span3{grid-column:span 3;}
-.span4{grid-column:span 4;}
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
-.sec-label{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:9px;font-weight:800;letter-spacing:2.5px;text-transform:uppercase;
-  padding:3px 10px;margin:12px 0 7px;
-  display:inline-block;
-}
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 
-/* ─── CARD ─── */
-.card{
-  border:1.5px solid var(--border-dark);
-  border-radius:3px;
-  overflow:hidden;
-  background:white;
-}
-.card-h{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:11.5px;font-weight:800;letter-spacing:0.5px;text-transform:uppercase;
-  padding:4px 8px 3px;
-  display:flex;align-items:center;gap:5px;
-  border-bottom:1.5px solid var(--border-dark);
-}
-.card-b{padding:7px 8px;}
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); }
 
-/* ─── COLOR ACCENTS ─── */
-.red  .card-h{background:var(--red);color:white;}
-.blue .card-h{background:var(--blue);color:white;}
-.green.card-h{background:var(--green);color:white;}
-.amber.card-h{background:var(--amber);color:white;}
-.purple.card-h{background:var(--purple);color:white;}
-.teal .card-h{background:var(--teal);color:white;}
-.orange.card-h{background:var(--orange);color:white;}
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(10,10,10,0);
+    transition: background 0.4s;
+  }
 
-.red   {border-color:var(--red);}
-.blue  {border-color:var(--blue);}
-.green {border-color:var(--green);}
-.amber {border-color:var(--amber);}
-.purple{border-color:var(--purple);}
-.teal  {border-color:var(--teal);}
-.orange{border-color:var(--orange);}
+  nav.scrolled {
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(12px);
+  }
 
-/* ─── CODE ─── */
-.cb{
-  background:var(--code-bg);
-  border-radius:2px;
-  padding:6px 8px;margin:4px 0;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9.5px;line-height:1.75;
-  color:var(--code-text);
-}
-.fn{color:var(--fn);}
-.kw{color:var(--kw);}
-.num{color:var(--num);}
-.str{color:var(--str);}
-.cmt{color:var(--cmt);font-style:italic;}
-.hi{color:#fbbf24;font-weight:600;}
-code{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9.5px;
-  background:#e8e0d4;
-  padding:0px 4px;border-radius:2px;
-  color:var(--blue);
-}
+  .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    text-decoration: none;
+  }
 
-/* ─── FORMULA BOX ─── */
-.fx{
-  background:var(--paper2);
-  border:1px solid var(--border);
-  border-left:3px solid;
-  border-radius:2px;
-  padding:5px 8px;margin:4px 0;
-  font-family:'IBM Plex Mono',monospace;
-  font-size:9.5px;line-height:1.8;
-}
-.fx-lbl{font-size:8.5px;color:#666;font-family:'Barlow',sans-serif;font-style:italic;}
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
 
-/* ─── TABLE ─── */
-table{width:100%;border-collapse:collapse;font-size:10px;}
-th{
-  background:var(--paper3);
-  padding:3px 6px;
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.4px;
-  text-align:left;border-bottom:1.5px solid var(--border-dark);
-}
-td{padding:3px 6px;border-bottom:1px solid var(--border);vertical-align:top;}
-tr:last-child td{border-bottom:none;}
-.mono{font-family:'IBM Plex Mono',monospace;font-size:9px;}
-.bold{font-weight:600;}
-.red-t{color:var(--red);}
-.blue-t{color:var(--blue);}
-.green-t{color:var(--green);}
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
 
-/* ─── TAGS ─── */
-.d-tag{background:#dbeafe;color:#1e40af;border:1px solid #93c5fd;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
-.p-tag{background:#dcfce7;color:#166534;border:1px solid #86efac;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
-.q-tag{background:#fef9c3;color:#854d0e;border:1px solid #fde047;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
-.r-tag{background:#f3e8ff;color:#6b21a8;border:1px solid #d8b4fe;padding:1px 5px;border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;}
+  .nav-links a:hover { color: var(--white); }
 
-/* ─── ALERT ROWS ─── */
-.alert{
-  display:flex;align-items:flex-start;gap:5px;
-  padding:4px 7px;margin:3px 0;border-radius:2px;
-  font-size:10px;line-height:1.45;
-}
-.alert-r{background:#fff0f0;border-left:3px solid var(--red);}
-.alert-b{background:#eef4ff;border-left:3px solid var(--blue);}
-.alert-g{background:#f0fff4;border-left:3px solid var(--green);}
-.alert-y{background:#fffbeb;border-left:3px solid #d97706;}
-.alert-icon{font-size:11px;flex-shrink:0;margin-top:1px;}
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 9px 20px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
 
-/* ─── KV rows ─── */
-.kv{display:flex;justify-content:space-between;align-items:baseline;padding:2.5px 0;border-bottom:1px dashed var(--border);}
-.kv:last-child{border-bottom:none;}
-.kv-k{color:#444;font-size:10px;}
-.kv-v{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:600;color:var(--blue);}
+  .nav-cta:hover { opacity: 0.82; }
 
-/* ─── DIVIDER ─── */
-.div-row{
-  display:flex;align-items:center;gap:8px;
-  margin:10px 0 7px;
-}
-.div-line{flex:1;height:1px;background:var(--border-dark);}
-.div-txt{
-  font-family:'Barlow Condensed',sans-serif;
-  font-size:9.5px;font-weight:800;letter-spacing:2px;text-transform:uppercase;
-  color:white;padding:2px 12px;border-radius:1px;white-space:nowrap;
-}
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { width: 22px; height: 1px; background: var(--muted); }
 
-@media print{
-  body{background:var(--paper)!important;}
-  .page{padding:10px 14px;}
-}
+  /* ─── TICKER ─── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-bottom: 1px solid var(--rule);
+    background: var(--off);
+    white-space: nowrap;
+    padding: 12px 0;
+    margin-top: 64px;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    animation: ticker 32s linear infinite;
+  }
+
+  .ticker-track span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 0 40px;
+  }
+
+  .ticker-track span b {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: calc(100vh - 64px);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-left {
+    padding: 80px 48px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 56px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+
+  .btn-ghost {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--rule-bright);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { color: var(--white); border-color: var(--white); }
+
+  .hero-right {
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.25;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 420px;
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero-stat {
+    padding: 28px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .hero-stat:last-child { border-right: none; }
+
+  .hero-stat-num {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 5px;
+  }
+
+  .hero-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ─── SHARED SECTION ─── */
+  .s-header {
+    padding: 64px 48px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .s-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .s-label::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .s-title {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--white);
+  }
+
+  .s-title em { font-weight: 400; font-style: italic; }
+
+  .s-desc {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 360px;
+    line-height: 1.8;
+    align-self: flex-end;
+  }
+
+  /* ─── SERVICES ─── */
+  #services { border-top: 1px solid var(--rule); }
+
+  .services-list {
+    margin-top: 48px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .svc-row {
+    display: grid;
+    grid-template-columns: 72px 1.1fr 1.2fr 1fr;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.18s;
+  }
+
+  .svc-row:hover { background: var(--off); }
+
+  .svc-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+    padding: 36px 0 36px 48px;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .svc-name {
+    padding: 36px 40px 36px 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  .svc-title {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .svc-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .svc-row.featured .svc-tag {
+    color: var(--muted);
+    border: 1px solid var(--dim);
+    padding: 2px 8px;
+    display: inline-block;
+  }
+
+  .svc-desc {
+    padding: 36px 40px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .svc-desc p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .svc-bullets {
+    padding: 36px 48px 36px 40px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .svc-bullets li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.55;
+  }
+
+  .svc-bullets li::before {
+    content: '/';
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* ─── CAPABILITIES ─── */
+  #capabilities { border-top: 1px solid var(--rule); }
+
+  .caps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .cap-cell {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    transition: background 0.18s;
+  }
+
+  .cap-cell:nth-child(even) { border-right: none; }
+  .cap-cell:hover { background: var(--off); }
+
+  .cap-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .cap-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    line-height: 1.15;
+  }
+
+  .cap-body {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.78;
+    max-width: 380px;
+  }
+
+  /* ─── WHY ─── */
+  #why { border-top: 1px solid var(--rule); }
+
+  .why-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .why-col-l {
+    padding: 56px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .why-col-r {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .why-items { list-style: none; }
+
+  .why-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .why-item:last-child { border-bottom: none; }
+
+  .why-idx {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .why-h {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .why-p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.72;
+  }
+
+  .why-statement {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 40px;
+  }
+
+  .why-statement em { font-style: italic; font-weight: 400; }
+
+  .why-quote {
+    border-top: 1px solid var(--rule);
+    padding-top: 36px;
+  }
+
+  .why-quote-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+
+  .why-quote p {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── FOUNDER ─── */
+  #founder { border-top: 1px solid var(--rule); }
+
+  .founder-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .founder-l {
+    padding: 56px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .founder-r {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .founder-name {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6vw, 68px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 22px;
+  }
+
+  .founder-name em { font-style: italic; font-weight: 400; }
+
+  .founder-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .founder-role::before { content: ''; width: 22px; height: 1px; background: var(--muted); }
+
+  .founder-bio {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 36px;
+  }
+
+  .fg-cell {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  .fg-cell:nth-child(even) { border-right: none; padding-left: 22px; }
+  .fg-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+  .fg-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 5px;
+  }
+
+  .fg-val {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .founder-tags-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 18px;
+  }
+
+  .founder-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .f-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid var(--rule-bright);
+    padding: 7px 13px;
+    text-transform: uppercase;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .f-tag:hover { color: var(--white); border-color: var(--white); }
+
+  .founder-pullquote {
+    border-top: 1px solid var(--rule);
+    padding-top: 36px;
+  }
+
+  .founder-pullquote p {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ─── CTA ─── */
+  #cta { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+  .cta-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .cta-l {
+    padding: 80px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .cta-title {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 44px;
+  }
+
+  .cta-title em { font-style: italic; font-weight: 400; }
+
+  .cta-r {
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 36px;
+    max-width: 400px;
+  }
+
+  .cta-email {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    margin-top: 24px;
+  }
+
+  .cta-email a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .cta-email a:hover { color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 26px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .f-brand {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dim);
+  }
+
+  .f-links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .f-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .f-links a:hover { color: var(--muted); }
+
+  .f-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+  }
+
+  /* ─── REVEAL ─── */
+  .rev {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .rev.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: 0.08s; }
+  .d2 { transition-delay: 0.16s; }
+  .d3 { transition-delay: 0.24s; }
+  .d4 { transition-delay: 0.32s; }
+  .d5 { transition-delay: 0.40s; }
+  .d6 { transition-delay: 0.48s; }
+  .d7 { transition-delay: 0.56s; }
+
+  /* ─── MOBILE ─── */
+  .m-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 24px;
+    flex-direction: column;
+    transform: translateY(-110%);
+    transition: transform 0.3s;
+    z-index: 99;
+  }
+  .m-menu.open { transform: translateY(0); }
+  .m-menu a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.2s;
+  }
+  .m-menu a:last-child { border-bottom: none; }
+  .m-menu a:hover { color: var(--white); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1080px) {
+    .svc-row { grid-template-columns: 60px 1fr 1fr; }
+    .svc-bullets { display: none; }
+  }
+
+  @media (max-width: 860px) {
+    nav { padding: 0 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .m-menu { display: flex; }
+
+    .hero-main { grid-template-columns: 1fr; }
+    .hero-left { padding: 48px 24px; border-right: none; border-bottom: 1px solid var(--rule); }
+    .hero-right { padding: 36px 24px; }
+    .hero-bottom { grid-template-columns: 1fr 1fr; }
+    .hero-stat { padding: 20px 24px; }
+    .hero-stat:nth-child(2) { border-right: none; }
+    .hero-stat:last-child { grid-column: 1/-1; border-top: 1px solid var(--rule); border-right: none; }
+
+    .s-header { padding: 48px 24px 0; flex-direction: column; gap: 20px; }
+    .s-desc { max-width: 100%; }
+
+    .svc-row { grid-template-columns: 1fr; border-bottom: 1px solid var(--rule); }
+    .svc-num { display: none; }
+    .svc-name { border-right: none; border-bottom: 1px solid var(--rule); padding: 24px 24px 16px; }
+    .svc-desc { border-right: none; border-bottom: 1px solid var(--rule); padding: 16px 24px; }
+    .svc-bullets { display: flex; padding: 16px 24px 24px; }
+
+    .caps-grid { grid-template-columns: 1fr; }
+    .cap-cell { border-right: none; padding: 40px 24px; }
+
+    .why-split { grid-template-columns: 1fr; }
+    .why-col-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+    .why-col-r { padding: 40px 24px; }
+
+    .founder-split { grid-template-columns: 1fr; }
+    .founder-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+    .founder-r { padding: 40px 24px; }
+
+    .cta-split { grid-template-columns: 1fr; }
+    .cta-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 48px 24px; }
+    .cta-r { padding: 36px 24px; }
+
+    footer { padding: 22px 24px; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .f-links { flex-wrap: wrap; gap: 18px; }
+  }
 </style>
 </head>
 <body>
-<div class="page">
 
-<!-- ═══ HEADER ═══ -->
-<div class="hdr">
-  <div class="hdr-left">
-    <h1>R Statistics <em>Cheat Sheet</em></h1>
-    <div class="hdr-sub">LABS 1–6 · Distributions · Moments · Functions · Graphics · Simulation · Exam Ready</div>
-  </div>
-  <div class="lab-pills">
-    <div class="lp" style="color:var(--blue);border-color:var(--blue)">Lab 1 · Vectors & Stats</div>
-    <div class="lp" style="color:var(--green);border-color:var(--green)">Lab 2 · Graphics</div>
-    <div class="lp" style="color:var(--amber);border-color:var(--amber)">Lab 3 · Functions</div>
-    <div class="lp" style="color:var(--red);border-color:var(--red)">Lab 4 · Moments</div>
-    <div class="lp" style="color:var(--purple);border-color:var(--purple)">Lab 5 · Binomial & Poisson</div>
-    <div class="lp" style="color:var(--teal);border-color:var(--teal)">Lab 6 · NegBin & Geometric</div>
+<nav id="nb">
+  <a class="nav-logo" href="#hero">Tarqon Intelligence</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#founder">Founder</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get in Touch</a>
+  <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="m-menu" id="mm">
+  <a href="#services" onclick="document.getElementById('mm').classList.remove('open')">Services</a>
+  <a href="#capabilities" onclick="document.getElementById('mm').classList.remove('open')">Capabilities</a>
+  <a href="#why" onclick="document.getElementById('mm').classList.remove('open')">Why Us</a>
+  <a href="#founder" onclick="document.getElementById('mm').classList.remove('open')">Founder</a>
+  <a href="#cta" onclick="document.getElementById('mm').classList.remove('open')">Get in Touch</a>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span>/ <b>AI Engineering</b></span>
+    <span>/ <b>RAG Systems</b></span>
+    <span>/ <b>Healthcare AI</b></span>
+    <span>/ <b>WhatsApp Automation</b></span>
+    <span>/ <b>Research to Product</b></span>
+    <span>/ <b>Data Consulting</b></span>
+    <span>/ <b>Full-Stack Platforms</b></span>
+    <span>/ <b>Internal Tools</b></span>
+    <span>/ <b>AI Engineering</b></span>
+    <span>/ <b>RAG Systems</b></span>
+    <span>/ <b>Healthcare AI</b></span>
+    <span>/ <b>WhatsApp Automation</b></span>
+    <span>/ <b>Research to Product</b></span>
+    <span>/ <b>Data Consulting</b></span>
+    <span>/ <b>Full-Stack Platforms</b></span>
+    <span>/ <b>Internal Tools</b></span>
   </div>
 </div>
 
-<!-- ═══ SECTION 1: THE d/p/q/r PATTERN ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--blue)">① The d / p / q / r Pattern — Master This First</div><div class="div-line"></div></div>
-<div class="cols4">
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-main">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">AI-First Engineering Company</div>
+        <h1 class="hero-title">Tarqon<br><em>Intelligence</em></h1>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">Book a Call</a>
+          <a href="#services" class="btn-ghost">Explore Services</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <p class="hero-tagline">Building Intelligent Systems That Scale</p>
+      <p class="hero-sub">Custom AI engineering, automation, and scalable platforms — built for real-world deployment, not demos. We take hard problems and ship working systems.</p>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <div class="hero-stat-num">7+</div>
+      <div class="hero-stat-label">Service Areas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">End-to-End</div>
+      <div class="hero-stat-label">Delivery Model</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">Research-Grade</div>
+      <div class="hero-stat-label">Engineering</div>
+    </div>
+  </div>
+</section>
 
-  <div class="card blue">
-    <div class="card-h">🎯 4 Functions for Every Distribution</div>
-    <div class="card-b">
-      <table>
-        <tr><th>Prefix</th><th>Returns</th><th>Use When</th></tr>
-        <tr><td><span class="d-tag">d___</span></td><td>P(X = x) — exact</td><td>"exactly x"</td></tr>
-        <tr><td><span class="p-tag">p___</span></td><td>P(X ≤ x) — CDF</td><td>"at most x"</td></tr>
-        <tr><td><span class="q-tag">q___</span></td><td>Smallest x: CDF ≥ p</td><td>percentile/quantile</td></tr>
-        <tr><td><span class="r-tag">r___</span></td><td>N random samples</td><td>simulate experiment</td></tr>
-      </table>
-      <div class="alert alert-y" style="margin-top:5px">
-        <span class="alert-icon">💡</span>
-        <span><b>Tail shortcuts:</b><br>
-        P(X &gt; x) = <code>1 − p___(x)</code><br>
-        P(X ≥ x) = <code>1 − p___(x−1)</code><br>
-        P(a ≤ X ≤ b) = <code>p___(b) − p___(a−1)</code></span>
+<!-- SERVICES -->
+<section id="services">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">What We Do</div>
+      <h2 class="s-title">Services Built<br><em>for Impact</em></h2>
+    </div>
+    <p class="s-desc">From research labs to enterprise teams — we engineer systems that drive real outcomes. No templates. No shortcuts.</p>
+  </div>
+  <div class="services-list">
+
+    <div class="svc-row rev">
+      <div class="svc-num">01</div>
+      <div class="svc-name">
+        <div class="svc-title">AI Systems for Researchers</div>
+        <div class="svc-tag">Research Infrastructure</div>
+      </div>
+      <div class="svc-desc"><p>Private, intelligent research infrastructure built to understand your domain and accelerate discovery. Not generic. Not off-the-shelf.</p></div>
+      <ul class="svc-bullets">
+        <li>Private research copilots & knowledge systems</li>
+        <li>RAG pipelines — FAISS, Pinecone, hybrid retrieval</li>
+        <li>Automated literature review & summarization</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d1">
+      <div class="svc-num">02</div>
+      <div class="svc-name">
+        <div class="svc-title">WhatsApp Automation</div>
+        <div class="svc-tag">Conversational AI</div>
+      </div>
+      <div class="svc-desc"><p>Convert conversations into customers — automated flows that qualify, engage, and convert at scale without a single manual message.</p></div>
+      <ul class="svc-bullets">
+        <li>Lead qualification bots with intelligent routing</li>
+        <li>24/7 customer support automation</li>
+        <li>Appointment booking & follow-up systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d2">
+      <div class="svc-num">03</div>
+      <div class="svc-name">
+        <div class="svc-title">Internal Tools for Startups</div>
+        <div class="svc-tag">Ops & Tooling</div>
+      </div>
+      <div class="svc-desc"><p>Ditch off-the-shelf tools that slow you down. Internal systems built to fit exactly how your team works — and that scale with you.</p></div>
+      <ul class="svc-bullets">
+        <li>Admin dashboards & operations tooling</li>
+        <li>Workflow automation & integration layers</li>
+        <li>Custom CRM and data pipeline systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d3">
+      <div class="svc-num">04</div>
+      <div class="svc-name">
+        <div class="svc-title">Full-Stack Web Systems</div>
+        <div class="svc-tag">Platforms & SaaS</div>
+      </div>
+      <div class="svc-desc"><p>Scalable, production-ready platforms engineered for performance. SaaS MVPs to complex web systems — built to convert and built to last.</p></div>
+      <ul class="svc-bullets">
+        <li>SaaS MVPs & product platforms</li>
+        <li>Scalable architecture — Next.js, PostgreSQL</li>
+        <li>High-conversion sites & landing pages</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d4">
+      <div class="svc-num">05</div>
+      <div class="svc-name">
+        <div class="svc-title">Healthcare AI Systems</div>
+        <div class="svc-tag">Clinical AI</div>
+      </div>
+      <div class="svc-desc"><p>Clinical-grade AI that improves patient outcomes — built with the rigor, validation standards, and domain depth that healthcare demands.</p></div>
+      <ul class="svc-bullets">
+        <li>Predictive ML for clinical decision support</li>
+        <li>Multimodal AI — imaging, clinical, EHR</li>
+        <li>Risk stratification & early warning systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row featured rev d5">
+      <div class="svc-num">06</div>
+      <div class="svc-name">
+        <div class="svc-title">Research to Startup Bridge</div>
+        <div class="svc-tag">Featured</div>
+      </div>
+      <div class="svc-desc"><p>Your research deserves to exist in the real world. We translate academic work into deployable, fundable systems — fast.</p></div>
+      <ul class="svc-bullets">
+        <li>Research papers into deployable products</li>
+        <li>MVP development for academic labs & institutes</li>
+        <li>Commercialization strategy + rapid prototyping</li>
+        <li>Prototype-to-product engineering pipelines</li>
+      </ul>
+    </div>
+
+    <div class="svc-row featured rev d6">
+      <div class="svc-num">07</div>
+      <div class="svc-name">
+        <div class="svc-title">Data + AI Consulting</div>
+        <div class="svc-tag">Featured</div>
+      </div>
+      <div class="svc-desc"><p>Turn your raw data into a strategic asset. From messy CSVs to decision intelligence systems — we extract value where others see noise.</p></div>
+      <ul class="svc-bullets">
+        <li>Data analysis, modeling & actionable insights</li>
+        <li>Predictive modeling & forecasting</li>
+        <li>Customer segmentation & behavior intelligence</li>
+        <li>Decision intelligence infrastructure</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">What We Build</div>
+      <h2 class="s-title">End-to-End<br><em>Engineering</em></h2>
+    </div>
+    <p class="s-desc">We own the full build — architecture to production. No handoffs. No fragmentation. One team that ships.</p>
+  </div>
+  <div class="caps-grid">
+    <div class="cap-cell rev">
+      <div class="cap-num">01 / Delivery</div>
+      <div class="cap-title">Idea to Deployment</div>
+      <p class="cap-body">We own the full lifecycle — requirements, architecture, development, and production deployment. No handoffs, no fragmentation, no vague timelines.</p>
+    </div>
+    <div class="cap-cell rev d1">
+      <div class="cap-num">02 / Integration</div>
+      <div class="cap-title">AI + Engineering as One</div>
+      <p class="cap-body">ML models don't live in notebooks. We integrate AI directly into production systems — real APIs, real data pipelines, real scale. Intelligence built-in from day one.</p>
+    </div>
+    <div class="cap-cell rev d2">
+      <div class="cap-num">03 / Architecture</div>
+      <div class="cap-title">Scalable by Design</div>
+      <p class="cap-body">Systems designed to grow with you. Distributed backends, efficient vector stores, and cloud-native deployments that handle real load without technical debt.</p>
+    </div>
+    <div class="cap-cell rev d3">
+      <div class="cap-num">04 / Experience</div>
+      <div class="cap-title">Production-Proven</div>
+      <p class="cap-body">We've deployed healthcare AI, research tooling, and automation systems in live production environments. We know what breaks — and how to prevent it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">Why Tarqon</div>
+      <h2 class="s-title">Elite Technical<br><em>Execution</em></h2>
+    </div>
+    <p class="s-desc">We are not a dev shop. We are not a no-code agency. We are engineers who build systems that work.</p>
+  </div>
+  <div class="why-split">
+    <div class="why-col-l rev">
+      <ul class="why-items">
+        <li class="why-item">
+          <span class="why-idx">01</span>
+          <div>
+            <div class="why-h">AI-First by Design</div>
+            <p class="why-p">We don't bolt AI on — it's the foundation. Every system is architected with intelligence as a core component, not a feature added at the end.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">02</span>
+          <div>
+            <div class="why-h">Research-Grade Systems</div>
+            <p class="why-p">Our work is grounded in rigorous ML research and applied science — not off-the-shelf models with a polished UI on top.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">03</span>
+          <div>
+            <div class="why-h">Fast Execution</div>
+            <p class="why-p">From scoping to production, our engineering velocity is built for startups and researchers who can't afford to wait three quarters for a prototype.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">04</span>
+          <div>
+            <div class="why-h">Custom-Built, Always</div>
+            <p class="why-p">No templates. No generic solutions. Every system is engineered from scratch for your specific requirements, constraints, and goals.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="why-col-r rev d2">
+      <div class="why-statement">
+        Deep technical expertise.<br><em>Real-world outcomes.</em><br>No shortcuts.
+      </div>
+      <div class="why-quote">
+        <div class="why-quote-label">Our Commitment</div>
+        <p>"Every system we ship is built to solve a real problem — not to impress at a demo. We measure success by the outcomes our clients achieve, not the lines of code we write."</p>
       </div>
     </div>
   </div>
+</section>
 
-  <div class="card purple">
-    <div class="card-h">🪙 Binomial — Bin(n, p)</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--purple)">P(X=x) = C(n,x)·pˣ·(1−p)^(n−x)<br><span class="fx-lbl">Mean = np · Var = np(1−p) · x = 0..n</span></div>
-      <div class="cb">
-<span class="fn">dbinom</span>(<span class="num">x</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># P(X = x)</span>
-<span class="fn">pbinom</span>(<span class="num">x</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># P(X ≤ x)</span>
-<span class="fn">qbinom</span>(<span class="num">0.5</span>,<span class="num">n</span>,<span class="num">p</span>)   <span class="cmt"># median</span>
-<span class="fn">rbinom</span>(<span class="num">N</span>, <span class="num">n</span>, <span class="num">p</span>)   <span class="cmt"># simulate</span></div>
-      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>Use only when: fixed <b>n</b>, independent trials, constant <b>p</b>, exactly 2 outcomes</span></div>
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">The Builder</div>
+      <h2 class="s-title">Meet the<br><em>Engineer</em></h2>
+    </div>
+    <p class="s-desc">Tarqon is founder-led. The person you talk to is the person who builds your system.</p>
+  </div>
+  <div class="founder-split">
+    <div class="founder-l rev">
+      <div class="founder-name">Shivansh<br><em>Singh</em></div>
+      <div class="founder-role">Founder & AI Engineer</div>
+      <p class="founder-bio">AI/ML engineer and full-stack developer building systems that work in production — not just in research notebooks. Focused on the hardest intersection of machine learning and real-world engineering.</p>
+      <p class="founder-bio">Deep expertise in multimodal ML, clinical AI, and retrieval-augmented systems. Years spent solving problems where cutting-edge research meets production constraints.</p>
+      <p class="founder-bio">Tarqon Intelligence: one principle — elite technical execution, delivered with the speed and focus modern builders demand.</p>
+      <div class="founder-grid">
+        <div class="fg-cell">
+          <div class="fg-label">Specialization</div>
+          <div class="fg-val">Multimodal AI</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Domain</div>
+          <div class="fg-val">Healthcare AI</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Infrastructure</div>
+          <div class="fg-val">RAG Pipelines</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Stack</div>
+          <div class="fg-val">Full-Stack Eng.</div>
+        </div>
+      </div>
+    </div>
+    <div class="founder-r rev d2">
+      <div>
+        <div class="founder-tags-label">Technical Stack & Focus Areas</div>
+        <div class="founder-tags">
+          <span class="f-tag">Multimodal ML</span>
+          <span class="f-tag">RAG / FAISS / Pinecone</span>
+          <span class="f-tag">Clinical AI</span>
+          <span class="f-tag">Next.js</span>
+          <span class="f-tag">PostgreSQL</span>
+          <span class="f-tag">Scalable Deployments</span>
+          <span class="f-tag">LLM Systems</span>
+          <span class="f-tag">Computer Vision</span>
+          <span class="f-tag">XGBoost / Sklearn</span>
+        </div>
+      </div>
+      <div class="founder-pullquote">
+        <p>"I build systems that solve real problems at the intersection of research and production — where most teams give up, we ship."</p>
+      </div>
     </div>
   </div>
+</section>
 
-  <div class="card green">
-    <div class="card-h">📞 Poisson — Pois(λ)</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--green)">P(X=x) = e^(−λ) · λˣ / x!<br><span class="fx-lbl">Mean = λ · Var = λ · x = 0,1,2,...∞</span></div>
-      <div class="cb">
-<span class="fn">dpois</span>(<span class="num">x</span>, <span class="num">lam</span>)   <span class="cmt"># P(X = x)</span>
-<span class="fn">ppois</span>(<span class="num">x</span>, <span class="num">lam</span>)   <span class="cmt"># P(X ≤ x)</span>
-<span class="fn">qpois</span>(<span class="num">0.9</span>,<span class="num">lam</span>)  <span class="cmt"># 90th pctile</span>
-<span class="fn">rpois</span>(<span class="num">N</span>, <span class="num">lam</span>)   <span class="cmt"># simulate</span></div>
-      <div class="alert alert-y"><span class="alert-icon">⚡</span><span><b>Rate scaling:</b> 6 calls/5min → per 1min: λ = 6/5 = 1.2. Always match λ to the time window asked!</span></div>
+<!-- CTA -->
+<section id="cta">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">Start a Project</div>
     </div>
   </div>
-
-  <div class="card teal">
-    <div class="card-h">🎲 NegBin & Geometric</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--teal)">NegBin: C(x+k−1,k−1)·pᵏ·qˣ<br><span class="fx-lbl">X = FAILURES before k successes · Mean=kq/p · Var=kq/p²</span><br>Geom (k=1): qˣ·p<br><span class="fx-lbl">Mean=q/p · Var=q/p²</span></div>
-      <div class="cb">
-<span class="fn">dnbinom</span>(<span class="num">x</span>,<span class="num">k</span>,<span class="num">p</span>)  <span class="cmt"># x = failures</span>
-<span class="fn">pnbinom</span>(<span class="num">x</span>,<span class="num">k</span>,<span class="num">p</span>)  <span class="cmt"># P(X ≤ x)</span>
-<span class="fn">dgeom</span>(<span class="num">x</span>, <span class="num">p</span>)    <span class="cmt"># Geom P(X=x)</span>
-<span class="fn">pgeom</span>(<span class="num">x</span>, <span class="num">p</span>)    <span class="cmt"># Geom CDF</span></div>
-      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>R counts <b>failures</b>. "kth success on nth trial" → pass <b>n−k</b> as x, not n</span></div>
+  <div class="cta-split">
+    <div class="cta-l rev">
+      <h2 class="cta-title">Let's build<br>something<br><em>intelligent.</em></h2>
+      <a href="mailto:tarqonintelligence@gmail.com" class="btn-primary">Get in Touch</a>
+    </div>
+    <div class="cta-r rev d2">
+      <p class="cta-sub">Whether you are a researcher, a founder, or an enterprise team — if you have a hard problem and need an intelligent system to solve it, we want to hear from you.</p>
+      <a href="#services" class="btn-ghost">View Services</a>
+      <div class="cta-email">Contact: <a href="mailto:tarqonintelligence@gmail.com">tarqonintelligence@gmail.com</a></div>
     </div>
   </div>
-
-</div>
-
-<!-- ═══ SECTION 2: KEYWORD DECODER + WHICH DISTRIBUTION ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--red)">② Translate Problem Words → R Code</div><div class="div-line"></div></div>
-<div class="cols3">
-
-  <div class="card red span2">
-    <div class="card-h">🔑 Keyword → Formula Decoder</div>
-    <div class="card-b">
-      <table>
-        <tr><th>Problem says…</th><th>Means</th><th style="width:44%">R Code</th></tr>
-        <tr><td>"<b>exactly</b> x" / "precisely x"</td><td class="mono red-t">P(X = x)</td><td><code>d___(x, ...)</code></td></tr>
-        <tr><td>"<b>at most</b> x" / "no more than" / "≤ x"</td><td class="mono blue-t">P(X ≤ x)</td><td><code>p___(x, ...)</code></td></tr>
-        <tr><td>"<b>at least</b> x" / "no fewer than" / "≥ x"</td><td class="mono green-t">1 − P(X ≤ x−1)</td><td><code>1 - p___(x-1, ...)</code></td></tr>
-        <tr><td>"<b>more than</b> x" / "greater than" / "&gt; x"</td><td class="mono green-t">1 − P(X ≤ x)</td><td><code>1 - p___(x, ...)</code></td></tr>
-        <tr><td>"<b>fewer than</b> x" / "less than" / "&lt; x"</td><td class="mono blue-t">P(X ≤ x−1)</td><td><code>p___(x-1, ...)</code></td></tr>
-        <tr><td>"<b>between a and b inclusive</b>"</td><td class="mono">P(X≤b) − P(X≤a−1)</td><td><code>p___(b,...) - p___(a-1,...)</code></td></tr>
-        <tr><td>"<b>between a and b exclusive</b>"</td><td class="mono">P(X≤b−1) − P(X≤a)</td><td><code>p___(b-1,...) - p___(a,...)</code></td></tr>
-        <tr><td>"<b>k</b>th success on <b>n</b>th trial" (NegBin)</td><td class="mono red-t">x = n − k failures</td><td><code>dnbinom(n-k, k, p)</code></td></tr>
-        <tr><td>"<b>first</b> success on <b>n</b>th trial" (Geom)</td><td class="mono red-t">x = n − 1 failures</td><td><code>dgeom(n-1, p)</code></td></tr>
-        <tr><td>"<b>wins series</b>" first to k wins (best of 2k−1)</td><td class="mono">Sum dnbinom(0..k−1,k,p)</td><td><code>pnbinom(k-1, k, p)</code></td></tr>
-        <tr><td>"minimum <b>n</b> so P(≥1 success)&gt; threshold"</td><td class="mono">Solve (1−p)ⁿ &lt; 1−threshold</td><td><code>ceiling(log(1-thr)/log(1-p))</code></td></tr>
-      </table>
-    </div>
-  </div>
-
-  <div class="card amber">
-    <div class="card-h">🧭 Which Distribution?</div>
-    <div class="card-b">
-      <div class="kv"><span class="kv-k">Fixed n trials, count successes</span><span class="kv-v">Binomial</span></div>
-      <div class="kv"><span class="kv-k">Count events in time/space (know avg rate)</span><span class="kv-v">Poisson</span></div>
-      <div class="kv"><span class="kv-k">Failures before k-th success</span><span class="kv-v">NegBin</span></div>
-      <div class="kv"><span class="kv-k">Failures before 1st success</span><span class="kv-v">Geometric</span></div>
-      <div class="kv"><span class="kv-k">n large, p small, np = λ moderate</span><span class="kv-v">Poisson ≈ Binom</span></div>
-      <div class="kv"><span class="kv-k">Waiting time between events (continuous)</span><span class="kv-v">Exponential</span></div>
-      <div class="kv"><span class="kv-k">Symmetric bell, continuous data</span><span class="kv-v">Normal</span></div>
-      <div class="alert alert-r" style="margin-top:6px"><span class="alert-icon">⚠</span><span>Poisson approx valid: n&gt;30, p&lt;0.05, np&lt;10</span></div>
-      <div class="alert alert-g"><span class="alert-icon">✔</span><span>Always check: probabilities sum to 1? Mean matches np or λ?</span></div>
-      <div class="alert alert-b"><span class="alert-icon">🏆</span><span><b>Championship series</b> = NegBin, NOT Binomial over all games</span></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══ SECTION 3: EXPECTATIONS & MOMENTS ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--green)">③ Expectations, Variance & Moments (Lab 4)</div><div class="div-line"></div></div>
-<div class="cols4">
-
-  <div class="card green">
-    <div class="card-h">⚖ Expected Value E(X)</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--green)">Discrete: E(X) = Σ x · P(X=x)<br>Continuous: E(X) = ∫ x · f(x) dx<br><span class="fx-lbl">E(X²) → replace x with x²  ·  E[g(X)] → replace x with g(x)</span></div>
-      <div class="cb">
-<span class="cmt"># Discrete</span>
-<span class="hi">ex &lt;- <span class="fn">sum</span>(x * probs)</span>
-<span class="fn">weighted.mean</span>(x, p)  <span class="cmt"># same</span>
-<span class="cmt"># Continuous</span>
-<span class="fn">integrate</span>(<span class="kw">function</span>(x) x*f(x),
-          a, b)$value</div>
-    </div>
-  </div>
-
-  <div class="card red">
-    <div class="card-h">📊 Variance & Std Dev</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--red)">Var(X) = E(X²) − [E(X)]² ← use this<br>Also: E[(X−μ)²] ← same thing<br>σ = √Var(X)</div>
-      <div class="cb">
-ex  &lt;- <span class="fn">sum</span>(x * p)
-ex2 &lt;- <span class="fn">sum</span>(x^<span class="num">2</span> * p)
-<span class="hi">varx &lt;- ex2 - ex^<span class="num">2</span></span>
-<span class="cmt"># OR equivalently:</span>
-varx &lt;- <span class="fn">weighted.mean</span>(
-  (x - ex)^<span class="num">2</span>, p)</div>
-      <div class="alert alert-y"><span class="alert-icon">💡</span><span>For Continuous: <code>integrate(function(x) x^2*f(x),a,b)$value - ex^2</code></span></div>
-    </div>
-  </div>
-
-  <div class="card amber">
-    <div class="card-h">📐 rth Moment — General</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--amber)">μ'ᵣ = E(Xʳ) = ∫ xʳ · f(x) dx<br><span class="fx-lbl">r=1: mean · r=2: feeds variance · r=3: skewness</span></div>
-      <div class="cb">
-<span class="cmt"># Continuous rth moment</span>
-moment &lt;- <span class="kw">function</span>(f, r, a, b){
-  <span class="fn">integrate</span>(<span class="kw">function</span>(x) x^r*f(x),
-            a, b)$value
-}
-<span class="cmt"># Discrete rth moment</span>
-<span class="fn">sum</span>(x^r * <span class="fn">dbinom</span>(x, n, p))</div>
-      <div class="alert alert-b"><span class="alert-icon">📌</span><span>Exponential rth moment = <b>r! / λʳ</b></span></div>
-    </div>
-  </div>
-
-  <div class="card blue">
-    <div class="card-h">📋 Mean & Variance by Distribution</div>
-    <div class="card-b">
-      <table>
-        <tr><th>Distribution</th><th>Mean</th><th>Variance</th></tr>
-        <tr><td>Binomial(n,p)</td><td class="mono bold blue-t">np</td><td class="mono">np(1−p)</td></tr>
-        <tr><td>Poisson(λ)</td><td class="mono bold blue-t">λ</td><td class="mono">λ</td></tr>
-        <tr><td>Geometric(p)</td><td class="mono bold blue-t">q/p</td><td class="mono">q/p²</td></tr>
-        <tr><td>NegBin(k,p)</td><td class="mono bold blue-t">kq/p</td><td class="mono">kq/p²</td></tr>
-        <tr><td>Exponential(λ)</td><td class="mono bold blue-t">1/λ</td><td class="mono">1/λ²</td></tr>
-        <tr><td>Normal(μ,σ²)</td><td class="mono bold blue-t">μ</td><td class="mono">σ²</td></tr>
-      </table>
-      <div class="alert alert-r" style="margin-top:4px"><span class="alert-icon">⚠</span><span>Poisson: Mean = Variance = λ. If these differ, it's not Poisson.</span></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══ SECTION 4: FUNCTIONS, CALCULUS, LOOPS ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--amber)">④ Functions · Calculus · Loops · Conditionals (Lab 3)</div><div class="div-line"></div></div>
-<div class="cols4">
-
-  <div class="card amber">
-    <div class="card-h">⚙ Writing Functions</div>
-    <div class="card-b">
-      <div class="cb">
-<span class="fn">my_fn</span> &lt;- <span class="kw">function</span>(a, b=<span class="num">2</span>) {
-  result &lt;- a + b
-  <span class="kw">return</span>(result)  <span class="cmt"># explicit</span>
-}
-<span class="fn">my_fn</span>(<span class="num">5</span>)      <span class="cmt"># b=2 (default) → 7</span>
-<span class="fn">my_fn</span>(<span class="num">5</span>, <span class="num">3</span>)   <span class="cmt"># b=3 → 8</span>
-<span class="cmt"># Nested function (closure)</span>
-outer &lt;- <span class="kw">function</span>(lam, r) {
-  <span class="fn">integrate</span>(<span class="kw">function</span>(x) x^r*
-    lam*<span class="fn">exp</span>(-lam*x), <span class="num">0</span>, <span class="fn">Inf</span>)$value
-}</div>
-    </div>
-  </div>
-
-  <div class="card teal">
-    <div class="card-h">∂ Calculus in R (Lab 3)</div>
-    <div class="card-b">
-      <div class="cb">
-<span class="cmt"># Symbolic derivative (base R)</span>
-f &lt;- <span class="fn">expression</span>(x^<span class="num">2</span>+<span class="num">3</span>*x+<span class="num">5</span>)
-fp &lt;- <span class="fn">D</span>(f, <span class="str">"x"</span>)     <span class="cmt"># → 2*x+3</span>
-<span class="fn">eval</span>(fp, <span class="fn">list</span>(x=<span class="num">2</span>))  <span class="cmt"># = 7</span>
-<span class="cmt"># Deriv package (returns function)</span>
-library(Deriv)
-fp &lt;- <span class="fn">Deriv</span>(f, <span class="str">"x"</span>)
-fp(<span class="num">2</span>)  <span class="cmt"># = 7  ← callable!</span>
-<span class="cmt"># Root finding</span>
-<span class="fn">uniroot</span>(f, c(<span class="num">0</span>,<span class="num">3</span>))$root
-<span class="cmt"># Integration</span>
-<span class="fn">integrate</span>(f, <span class="num">0</span>, <span class="fn">Inf</span>)$value</div>
-    </div>
-  </div>
-
-  <div class="card red">
-    <div class="card-h">🔁 Loops & Conditionals</div>
-    <div class="card-b">
-      <div class="cb">
-<span class="cmt"># if / else if / else</span>
-<span class="kw">if</span> (x &lt; <span class="num">0</span>)       { <span class="str">"neg"</span> }
-<span class="kw">else if</span> (x==<span class="num">0</span>)  { <span class="str">"zero"</span> }
-<span class="kw">else</span>             { <span class="str">"pos"</span> }
-<span class="cmt"># for loop</span>
-<span class="kw">for</span> (i <span class="kw">in</span> <span class="num">1</span>:<span class="num">5</span>) { <span class="fn">print</span>(i) }
-<span class="cmt"># while loop</span>
-i &lt;- <span class="num">1</span>
-<span class="kw">while</span> (i &lt; <span class="num">6</span>) { <span class="fn">print</span>(i); i &lt;- i+<span class="num">1</span> }
-<span class="cmt"># Apply fn to vector (vectorize!)</span>
-<span class="fn">sapply</span>(<span class="num">-5</span>:<span class="num">5</span>, my_fn)</div>
-    </div>
-  </div>
-
-  <div class="card purple">
-    <div class="card-h">🧮 Bayes' Theorem</div>
-    <div class="card-b">
-      <div class="fx" style="border-color:var(--purple)">P(A|D) = P(D|A)·P(A) / P(D)<br><span class="fx-lbl">P(D) = Σ P(D|Aᵢ)·P(Aᵢ) — total probability</span></div>
-      <div class="cb">
-p_prior &lt;- <span class="fn">c</span>(<span class="num">.15</span>,<span class="num">.35</span>,<span class="num">.50</span>)
-p_lik   &lt;- <span class="fn">c</span>(<span class="num">.01</span>,<span class="num">.05</span>,<span class="num">.02</span>)
-joint   &lt;- p_prior * p_lik
-<span class="hi">post    &lt;- joint / <span class="fn">sum</span>(joint)</span>
-<span class="cmt"># post[i] = P(factory i | defective)</span></div>
-      <div class="alert alert-b"><span class="alert-icon">📌</span><span><code>joint / sum(joint)</code> is the one-liner for full Bayes posteriors</span></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══ SECTION 5: GRAPHICS + DESCRIPTIVE STATS ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--purple)">⑤ Graphics · Descriptive Statistics (Labs 1 & 2)</div><div class="div-line"></div></div>
-<div class="cols3">
-
-  <div class="card purple">
-    <div class="card-h">📈 Plot Functions Quick Ref</div>
-    <div class="card-b">
-      <table>
-        <tr><th>Chart type</th><th>Function</th><th>Key args</th></tr>
-        <tr><td>Scatter / Line</td><td><code>plot(x,y)</code></td><td><code>type='l','p','h','o'</code></td></tr>
-        <tr><td>Bar chart</td><td><code>barplot(h)</code></td><td><code>names.arg, beside</code></td></tr>
-        <tr><td>Histogram</td><td><code>hist(x)</code></td><td><code>breaks, freq</code></td></tr>
-        <tr><td>Boxplot</td><td><code>boxplot(x,y)</code></td><td><code>notch, horizontal</code></td></tr>
-        <tr><td>Pie chart</td><td><code>pie(x, labels)</code></td><td><code>col, radius</code></td></tr>
-        <tr><td>Dot chart</td><td><code>dotchart(x,l)</code></td><td><code>xlab, pch</code></td></tr>
-        <tr><td>Multi-curve</td><td><code>lines(x,y)</code></td><td>adds to existing plot</td></tr>
-        <tr><td>Multi-plot</td><td><code>par(mfrow=c(r,c))</code></td><td>reset: <code>c(1,1)</code></td></tr>
-      </table>
-      <div class="cb" style="margin-top:5px">
-<span class="fn">abline</span>(v=<span class="num">5</span>, lty=<span class="num">2</span>, col=<span class="str">"red"</span>) <span class="cmt"># vert line</span>
-<span class="fn">abline</span>(h=<span class="num">0</span>)                    <span class="cmt"># horiz baseline</span>
-<span class="fn">legend</span>(<span class="str">"topright"</span>, legend, col, lwd)
-<span class="fn">title</span>(main=<span class="str">"My Plot"</span>, xlab, ylab)</div>
-    </div>
-  </div>
-
-  <div class="card blue">
-    <div class="card-h">🔢 Descriptive Stats — Lab 1</div>
-    <div class="card-b">
-      <div class="cb">
-<span class="fn">mean</span>(x); <span class="fn">median</span>(x); <span class="fn">sd</span>(x)
-<span class="fn">var</span>(x);  <span class="fn">sum</span>(x);  <span class="fn">length</span>(x)
-<span class="fn">min</span>(x);  <span class="fn">max</span>(x);  <span class="fn">range</span>(x)
-<span class="fn">IQR</span>(x)            <span class="cmt"># Q3 − Q1</span>
-<span class="fn">quantile</span>(x, <span class="num">0.25</span>) <span class="cmt"># any %ile</span>
-<span class="fn">summary</span>(x)        <span class="cmt"># 5-num summary</span>
-<span class="fn">table</span>(x)          <span class="cmt"># frequency table</span>
-<span class="fn">sort</span>(x); <span class="fn">rank</span>(x)  <span class="cmt"># order/rank</span>
-<span class="fn">cor</span>(x, y)         <span class="cmt"># correlation</span></div>
-      <div class="alert alert-r"><span class="alert-icon">⚠</span><span>Boxplot outlier: beyond Q1−1.5·IQR or Q3+1.5·IQR</span></div>
-      <div class="alert alert-y"><span class="alert-icon">💡</span><span>Skewed right: mean &gt; median. Skewed left: mean &lt; median.</span></div>
-    </div>
-  </div>
-
-  <div class="card orange">
-    <div class="card-h">🎰 Sampling & Key Idioms</div>
-    <div class="card-b">
-      <div class="cb">
-<span class="fn">sample</span>(data, n, replace=<span class="kw">F</span>)
-<span class="fn">set.seed</span>(<span class="num">42</span>)    <span class="cmt"># reproducible</span>
-<span class="fn">rep</span>(<span class="str">"A"</span>, <span class="num">10</span>)    <span class="cmt"># repeat 10×</span>
-<span class="fn">seq</span>(<span class="num">0</span>,<span class="num">1</span>,<span class="num">0.01</span>)  <span class="cmt"># fine grid</span>
-<span class="fn">choose</span>(<span class="num">n</span>, <span class="num">k</span>)    <span class="cmt"># C(n,k)</span>
-<span class="fn">factorial</span>(<span class="num">5</span>)   <span class="cmt"># 5! = 120</span>
-<span class="fn">exp</span>(<span class="num">-2</span>)         <span class="cmt"># e^(−2)</span>
-<span class="fn">log</span>(x)          <span class="cmt"># ln(x)</span>
-<span class="fn">ceiling</span>(x)      <span class="cmt"># round UP</span>
-<span class="fn">floor</span>(x)        <span class="cmt"># round DOWN</span>
-<span class="fn">paste</span>(<span class="str">"x ="</span>, x) <span class="cmt"># join strings</span>
-<span class="fn">cat</span>(<span class="str">"x ="</span>, x, <span class="str">"\n"</span>) <span class="cmt"># print clean</span></div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ═══ SECTION 6: TRICKY PATTERNS & HARD PROBLEM CHECKLIST ═══ -->
-<div class="div-row"><div class="div-line"></div><div class="div-txt" style="background:var(--red)">⑥ Common Mistakes · Tricky Patterns · Hard Problem Checklist</div><div class="div-line"></div></div>
-<div class="cols2">
-
-  <div class="card red">
-    <div class="card-h">🔴 Common Mistakes & Traps</div>
-    <div class="card-b">
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Wrong Poisson λ for interval:</b> 6 calls/5min asked for 1 min → λ=6/5×1=1.2, not 6. Recalculate λ = rate×interval for every question.</span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>NegBin: passing total trials not failures:</b> "4th success on 9th trial" → 5 failures, use <code>dnbinom(5,4,p)</code>, NOT <code>dnbinom(9,4,p)</code></span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Geometric X=0 means 1st trial succeeds:</b> <code>dgeom(0,p) = p</code>. "First success on 3rd call" → 2 failures → <code>dgeom(2,p)</code></span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Using Binomial for a series:</b> "Win series in 6 games" is NegBin (fixed wins, variable games), not Binomial (fixed games, variable wins).</span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Plotting piecewise with if():</b> <code>if()</code> is not vectorized. Use <code>sapply(x_vec, f)</code> to apply a scalar function across a vector for plotting.</span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>Not verifying pdf:</b> Before computing E(X), always check <code>integrate(f, lower, upper)$value == 1</code>. If not 1, your f is wrong.</span></div>
-      <div class="alert alert-r"><span class="alert-icon">✗</span><span><b>"At least once" minimum n:</b> P(X≥1) = 1−(1−p)ⁿ &gt; threshold → solve: n &gt; log(1−threshold)/log(1−p). Use <code>ceiling()</code> for the answer.</span></div>
-    </div>
-  </div>
-
-  <div class="card green">
-    <div class="card-h">✅ Hard Problem Step-by-Step Checklist</div>
-    <div class="card-b">
-      <div class="alert alert-g"><span class="alert-icon">1️⃣</span><span><b>Identify what's fixed vs. what's random.</b> Fixed n & count successes → Binomial. Fixed target successes & count failures → NegBin. Count events in interval → Poisson.</span></div>
-      <div class="alert alert-g"><span class="alert-icon">2️⃣</span><span><b>Match the parameterization.</b> Does R use the same convention as the problem? NegBin in R = failures. Geometric in R = failures (x=0 is valid). Adjust accordingly.</span></div>
-      <div class="alert alert-g"><span class="alert-icon">3️⃣</span><span><b>Decode the probability phrase.</b> Use the keyword decoder above to turn "at least / fewer than / between" into the correct d/p function and whether to add/subtract 1.</span></div>
-      <div class="alert alert-g"><span class="alert-icon">4️⃣</span><span><b>Scale rates for Poisson.</b> Confirm your λ matches the exact time/space interval asked. Rescale: λ_new = λ_given × (target interval / given interval).</span></div>
-      <div class="alert alert-g"><span class="alert-icon">5️⃣</span><span><b>For moment problems:</b> Define f(x), verify integral = 1, then compute E(X) = integrate(x·f(x)), Var = E(X²)−E(X)². Use closure functions for general rth moment.</span></div>
-      <div class="alert alert-g"><span class="alert-icon">6️⃣</span><span><b>Sanity check your answer.</b> Probability must be between 0 and 1. Mean should match n·p or λ. Sum of full PMF = 1. If simulating, verify sim mean ≈ theoretical mean.</span></div>
-      <div class="alert alert-b" style="margin-top:4px"><span class="alert-icon">⭐</span><span><b>Bonus — Bayes structure:</b> Always = (likelihood × prior) / total. "Given defective" problems always follow this pattern. One line: <code>post = joint/sum(joint)</code></span></div>
-    </div>
-  </div>
-
-</div>
+</section>
 
 <!-- FOOTER -->
-<div style="margin-top:12px;padding-top:8px;border-top:2px double var(--ink);display:flex;justify-content:space-between;align-items:center">
-  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">R Statistics · Labs 1–6 · Distributions · Moments · Calculus · Graphics</span>
-  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">d=exact P(X=x) · p=cumulative P(X≤x) · q=quantile · r=random · Var = E(X²)−[E(X)]²</span>
-  <span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:#777">q=1−p · Geom=NegBin(k=1) · Poisson approx Binom when n large, p small</span>
-</div>
+<footer>
+  <div class="f-brand">Tarqon Intelligence</div>
+  <div class="f-links">
+    <a href="#services">Services</a>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#founder">Founder</a>
+    <a href="mailto:tarqonintelligence@gmail.com">Contact</a>
+  </div>
+  <div class="f-copy">2025 Tarqon Intelligence</div>
+</footer>
 
-</div>
+<script>
+  // Navbar scroll effect
+  const nb = document.getElementById('nb');
+  window.addEventListener('scroll', () => {
+    nb.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Hamburger menu toggle
+  const mm = document.getElementById('mm');
+  document.getElementById('hbg').addEventListener('click', () => {
+    mm.classList.toggle('open');
+  });
+
+  // Reveal on scroll
+  const revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in');
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+
+  document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) {
+        e.preventDefault();
+        t.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  });
+</script>
 </body>
 </html>
