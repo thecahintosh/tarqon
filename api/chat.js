@@ -1,5 +1,8 @@
 import { Groq } from "groq-sdk";
-import knowledge from "../data/knowledge.json" assert { type: "json" };
+import { createRequire } from "module";
+
+const require = createRequire(import.meta.url);
+const knowledge = require("../data/knowledge.json");
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
