@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tarqon Intelligence</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=IBM+Plex+Mono:wght@300;400;500&family=Barlow:wght@300;400;500;600&display=swap');
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f4f2ee;
+    --off: #111111;
+    --off2: #161616;
+    --rule: rgba(244,242,238,0.09);
+    --rule-bright: rgba(244,242,238,0.2);
+    --muted: #888880;
+    --dim: #3e3e3a;
+    --font-serif: 'Playfair Display', Georgia, serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-sans: 'Barlow', sans-serif;
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--black); }
+  ::-webkit-scrollbar-thumb { background: var(--dim); }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    height: 64px;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(10,10,10,0);
+    transition: background 0.4s;
+  }
+
+  nav.scrolled {
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(12px);
+  }
+
+  .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 9px 20px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.82; }
+
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { width: 22px; height: 1px; background: var(--muted); }
+
+  /* ─── TICKER ─── */
+  .ticker-wrap {
+    overflow: hidden;
+    border-bottom: 1px solid var(--rule);
+    background: var(--off);
+    white-space: nowrap;
+    padding: 12px 0;
+    margin-top: 64px;
+  }
+
+  .ticker-track {
+    display: inline-flex;
+    animation: ticker 32s linear infinite;
+  }
+
+  .ticker-track span {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    padding: 0 40px;
+  }
+
+  .ticker-track span b {
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: calc(100vh - 64px);
+    display: grid;
+    grid-template-rows: 1fr auto;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-main {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .hero-left {
+    padding: 80px 48px;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 48px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    width: 32px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 900;
+    line-height: 0.92;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .hero-title em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 56px;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--black);
+    background: var(--white);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.82; }
+
+  .btn-ghost {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border: 1px solid var(--rule-bright);
+    padding: 14px 28px;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+    display: inline-block;
+  }
+
+  .btn-ghost:hover { color: var(--white); border-color: var(--white); }
+
+  .hero-right {
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .hero-tagline {
+    font-family: var(--font-serif);
+    font-size: clamp(22px, 3vw, 34px);
+    font-weight: 400;
+    font-style: italic;
+    line-height: 1.25;
+    color: var(--white);
+    margin-bottom: 32px;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 420px;
+  }
+
+  .hero-bottom {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .hero-stat {
+    padding: 28px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .hero-stat:last-child { border-right: none; }
+
+  .hero-stat-num {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 5px;
+  }
+
+  .hero-stat-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  /* ─── SHARED SECTION ─── */
+  .s-header {
+    padding: 64px 48px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+  }
+
+  .s-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+
+  .s-label::before {
+    content: '';
+    width: 28px;
+    height: 1px;
+    background: var(--muted);
+  }
+
+  .s-title {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    color: var(--white);
+  }
+
+  .s-title em { font-weight: 400; font-style: italic; }
+
+  .s-desc {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 360px;
+    line-height: 1.8;
+    align-self: flex-end;
+  }
+
+  /* ─── SERVICES ─── */
+  #services { border-top: 1px solid var(--rule); }
+
+  .services-list {
+    margin-top: 48px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .svc-row {
+    display: grid;
+    grid-template-columns: 72px 1.1fr 1.2fr 1fr;
+    border-bottom: 1px solid var(--rule);
+    transition: background 0.18s;
+  }
+
+  .svc-row:hover { background: var(--off); }
+
+  .svc-num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.06em;
+    padding: 36px 0 36px 48px;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .svc-name {
+    padding: 36px 40px 36px 0;
+    border-right: 1px solid var(--rule);
+  }
+
+  .svc-title {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .svc-tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .svc-row.featured .svc-tag {
+    color: var(--muted);
+    border: 1px solid var(--dim);
+    padding: 2px 8px;
+    display: inline-block;
+  }
+
+  .svc-desc {
+    padding: 36px 40px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .svc-desc p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .svc-bullets {
+    padding: 36px 48px 36px 40px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .svc-bullets li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.55;
+  }
+
+  .svc-bullets li::before {
+    content: '/';
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* ─── CAPABILITIES ─── */
+  #capabilities { border-top: 1px solid var(--rule); }
+
+  .caps-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .cap-cell {
+    padding: 56px 48px;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+    transition: background 0.18s;
+  }
+
+  .cap-cell:nth-child(even) { border-right: none; }
+  .cap-cell:hover { background: var(--off); }
+
+  .cap-num {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .cap-title {
+    font-family: var(--font-serif);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    line-height: 1.15;
+  }
+
+  .cap-body {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.78;
+    max-width: 380px;
+  }
+
+  /* ─── WHY ─── */
+  #why { border-top: 1px solid var(--rule); }
+
+  .why-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .why-col-l {
+    padding: 56px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .why-col-r {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .why-items { list-style: none; }
+
+  .why-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .why-item:last-child { border-bottom: none; }
+
+  .why-idx {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--dim);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  .why-h {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+
+  .why-p {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.72;
+  }
+
+  .why-statement {
+    font-family: var(--font-serif);
+    font-size: clamp(26px, 3.5vw, 42px);
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    margin-bottom: 40px;
+  }
+
+  .why-statement em { font-style: italic; font-weight: 400; }
+
+  .why-quote {
+    border-top: 1px solid var(--rule);
+    padding-top: 36px;
+  }
+
+  .why-quote-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+
+  .why-quote p {
+    font-family: var(--font-serif);
+    font-size: 17px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ─── FOUNDER ─── */
+  #founder { border-top: 1px solid var(--rule); }
+
+  .founder-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .founder-l {
+    padding: 56px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .founder-r {
+    padding: 56px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .founder-name {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6vw, 68px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 22px;
+  }
+
+  .founder-name em { font-style: italic; font-weight: 400; }
+
+  .founder-role {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .founder-role::before { content: ''; width: 22px; height: 1px; background: var(--muted); }
+
+  .founder-bio {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 14px;
+  }
+
+  .founder-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 36px;
+  }
+
+  .fg-cell {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--rule);
+    border-right: 1px solid var(--rule);
+  }
+
+  .fg-cell:nth-child(even) { border-right: none; padding-left: 22px; }
+  .fg-cell:nth-last-child(-n+2) { border-bottom: none; }
+
+  .fg-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 5px;
+  }
+
+  .fg-val {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--white);
+  }
+
+  .founder-tags-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 18px;
+  }
+
+  .founder-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 40px;
+  }
+
+  .f-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    border: 1px solid var(--rule-bright);
+    padding: 7px 13px;
+    text-transform: uppercase;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .f-tag:hover { color: var(--white); border-color: var(--white); }
+
+  .founder-pullquote {
+    border-top: 1px solid var(--rule);
+    padding-top: 36px;
+  }
+
+  .founder-pullquote p {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    font-style: italic;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ─── CTA ─── */
+  #cta { border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+  .cta-split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--rule);
+    margin-top: 48px;
+  }
+
+  .cta-l {
+    padding: 80px 48px;
+    border-right: 1px solid var(--rule);
+  }
+
+  .cta-title {
+    font-family: var(--font-serif);
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 900;
+    letter-spacing: -0.03em;
+    line-height: 0.92;
+    color: var(--white);
+    margin-bottom: 44px;
+  }
+
+  .cta-title em { font-style: italic; font-weight: 400; }
+
+  .cta-r {
+    padding: 80px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .cta-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.8;
+    margin-bottom: 36px;
+    max-width: 400px;
+  }
+
+  .cta-email {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+    margin-top: 24px;
+  }
+
+  .cta-email a {
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .cta-email a:hover { color: var(--white); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 26px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .f-brand {
+    font-family: var(--font-serif);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--dim);
+  }
+
+  .f-links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .f-links a {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .f-links a:hover { color: var(--muted); }
+
+  .f-copy {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+  }
+
+  /* ─── REVEAL ─── */
+  .rev {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.65s ease, transform 0.65s ease;
+  }
+  .rev.in { opacity: 1; transform: none; }
+  .d1 { transition-delay: 0.08s; }
+  .d2 { transition-delay: 0.16s; }
+  .d3 { transition-delay: 0.24s; }
+  .d4 { transition-delay: 0.32s; }
+  .d5 { transition-delay: 0.40s; }
+  .d6 { transition-delay: 0.48s; }
+  .d7 { transition-delay: 0.56s; }
+
+  /* ─── MOBILE ─── */
+  .m-menu {
+    display: none;
+    position: fixed;
+    top: 64px; left: 0; right: 0;
+    background: rgba(10,10,10,0.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 24px;
+    flex-direction: column;
+    transform: translateY(-110%);
+    transition: transform 0.3s;
+    z-index: 99;
+  }
+  .m-menu.open { transform: translateY(0); }
+  .m-menu a {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--rule);
+    transition: color 0.2s;
+  }
+  .m-menu a:last-child { border-bottom: none; }
+  .m-menu a:hover { color: var(--white); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1080px) {
+    .svc-row { grid-template-columns: 60px 1fr 1fr; }
+    .svc-bullets { display: none; }
+  }
+
+  @media (max-width: 860px) {
+    nav { padding: 0 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .m-menu { display: flex; }
+
+    .hero-main { grid-template-columns: 1fr; }
+    .hero-left { padding: 48px 24px; border-right: none; border-bottom: 1px solid var(--rule); }
+    .hero-right { padding: 36px 24px; }
+    .hero-bottom { grid-template-columns: 1fr 1fr; }
+    .hero-stat { padding: 20px 24px; }
+    .hero-stat:nth-child(2) { border-right: none; }
+    .hero-stat:last-child { grid-column: 1/-1; border-top: 1px solid var(--rule); border-right: none; }
+
+    .s-header { padding: 48px 24px 0; flex-direction: column; gap: 20px; }
+    .s-desc { max-width: 100%; }
+
+    .svc-row { grid-template-columns: 1fr; border-bottom: 1px solid var(--rule); }
+    .svc-num { display: none; }
+    .svc-name { border-right: none; border-bottom: 1px solid var(--rule); padding: 24px 24px 16px; }
+    .svc-desc { border-right: none; border-bottom: 1px solid var(--rule); padding: 16px 24px; }
+    .svc-bullets { display: flex; padding: 16px 24px 24px; }
+
+    .caps-grid { grid-template-columns: 1fr; }
+    .cap-cell { border-right: none; padding: 40px 24px; }
+
+    .why-split { grid-template-columns: 1fr; }
+    .why-col-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+    .why-col-r { padding: 40px 24px; }
+
+    .founder-split { grid-template-columns: 1fr; }
+    .founder-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 40px 24px; }
+    .founder-r { padding: 40px 24px; }
+
+    .cta-split { grid-template-columns: 1fr; }
+    .cta-l { border-right: none; border-bottom: 1px solid var(--rule); padding: 48px 24px; }
+    .cta-r { padding: 36px 24px; }
+
+    footer { padding: 22px 24px; flex-direction: column; align-items: flex-start; gap: 14px; }
+    .f-links { flex-wrap: wrap; gap: 18px; }
+  }
+
+  /* ─── CHATBOT ─── */
+  #chat-toggle {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 68px;
+    height: 68px;
+    border: none;
+    border-radius: 50%;
+    background: #f4f2ee;
+    color: #111;
+    cursor: pointer;
+    z-index: 9999;
+    font-size: 28px;
+    transition: .25s;
+    box-shadow: 0 20px 50px rgba(0,0,0,.45);
+  }
+
+  #chat-toggle:hover { transform: translateY(-3px); }
+
+  #chat-window {
+    position: fixed;
+    right: 28px;
+    bottom: 110px;
+    width: 380px;
+    height: 600px;
+    background: #0f0f0f;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: .3s;
+    box-shadow: 0 30px 70px rgba(0,0,0,.45);
+  }
+
+  #chat-window.open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  #chat-header {
+    padding: 22px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #121212;
+  }
+
+  #chat-title {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    color: white;
+  }
+
+  #chat-sub {
+    font-size: 12px;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  #chat-close {
+    background: none;
+    border: none;
+    color: #999;
+    font-size: 26px;
+    cursor: pointer;
+  }
+
+  #chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .bot {
+    align-self: flex-start;
+    background: #1d1d1d;
+    color: white;
+    padding: 14px 16px;
+    border-radius: 16px;
+    max-width: 82%;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .user {
+    align-self: flex-end;
+    background: #f4f2ee;
+    color: #111;
+    padding: 14px 16px;
+    border-radius: 16px;
+    max-width: 82%;
+    line-height: 1.6;
+    font-size: 14px;
+  }
+
+  .typing {
+    display: flex;
+    gap: 5px;
+    padding: 14px 18px;
+    background: #1d1d1d;
+    width: 70px;
+    border-radius: 16px;
+  }
+
+  .typing span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #888;
+    animation: bounce 1s infinite;
+  }
+
+  .typing span:nth-child(2) { animation-delay: .2s; }
+  .typing span:nth-child(3) { animation-delay: .4s; }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); opacity: .4; }
+    50% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  #suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 14px 18px;
+    border-top: 1px solid rgba(255,255,255,.05);
+  }
+
+  .suggestion {
+    padding: 8px 14px;
+    background: #1d1d1d;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 12px;
+    color: #ccc;
+    transition: .2s;
+  }
+
+  .suggestion:hover { background: #282828; color: white; }
+
+  #chat-input-area {
+    display: flex;
+    gap: 10px;
+    padding: 18px;
+    border-top: 1px solid rgba(255,255,255,.06);
+  }
+
+  #chat-input {
+    flex: 1;
+    background: #181818;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+  }
+
+  #chat-send {
+    width: 60px;
+    border: none;
+    background: #f4f2ee;
+    color: black;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  @media (max-width: 700px) {
+    #chat-window {
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      border-radius: 0;
+    }
+    #chat-toggle {
+      bottom: 20px;
+      right: 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<nav id="nb">
+  <a class="nav-logo" href="#hero">Tarqon Intelligence</a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#why">Why Us</a></li>
+    <li><a href="#founder">Founder</a></li>
+  </ul>
+  <a href="#cta" class="nav-cta">Get in Touch</a>
+  <div class="hamburger" id="hbg"><span></span><span></span><span></span></div>
+</nav>
+
+<div class="m-menu" id="mm">
+  <a href="#services" onclick="document.getElementById('mm').classList.remove('open')">Services</a>
+  <a href="#capabilities" onclick="document.getElementById('mm').classList.remove('open')">Capabilities</a>
+  <a href="#why" onclick="document.getElementById('mm').classList.remove('open')">Why Us</a>
+  <a href="#founder" onclick="document.getElementById('mm').classList.remove('open')">Founder</a>
+  <a href="#cta" onclick="document.getElementById('mm').classList.remove('open')">Get in Touch</a>
+</div>
+
+<div class="ticker-wrap">
+  <div class="ticker-track">
+    <span>/ <b>AI Engineering</b></span>
+    <span>/ <b>RAG Systems</b></span>
+    <span>/ <b>Healthcare AI</b></span>
+    <span>/ <b>WhatsApp Automation</b></span>
+    <span>/ <b>Research to Product</b></span>
+    <span>/ <b>Data Consulting</b></span>
+    <span>/ <b>Full-Stack Platforms</b></span>
+    <span>/ <b>Internal Tools</b></span>
+    <span>/ <b>AI Engineering</b></span>
+    <span>/ <b>RAG Systems</b></span>
+    <span>/ <b>Healthcare AI</b></span>
+    <span>/ <b>WhatsApp Automation</b></span>
+    <span>/ <b>Research to Product</b></span>
+    <span>/ <b>Data Consulting</b></span>
+    <span>/ <b>Full-Stack Platforms</b></span>
+    <span>/ <b>Internal Tools</b></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-main">
+    <div class="hero-left">
+      <div>
+        <div class="hero-eyebrow">AI-First Engineering Company</div>
+        <h1 class="hero-title">Tarqon<br><em>Intelligence</em></h1>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">Book a Call</a>
+          <a href="#services" class="btn-ghost">Explore Services</a>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <p class="hero-tagline">Building Intelligent Systems That Scale</p>
+      <p class="hero-sub">Custom AI engineering, automation, and scalable platforms — built for real-world deployment, not demos. We take hard problems and ship working systems.</p>
+    </div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <div class="hero-stat-num">7+</div>
+      <div class="hero-stat-label">Service Areas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">End-to-End</div>
+      <div class="hero-stat-label">Delivery Model</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">Research-Grade</div>
+      <div class="hero-stat-label">Engineering</div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">What We Do</div>
+      <h2 class="s-title">Services Built<br><em>for Impact</em></h2>
+    </div>
+    <p class="s-desc">From research labs to enterprise teams — we engineer systems that drive real outcomes. No templates. No shortcuts.</p>
+  </div>
+  <div class="services-list">
+
+    <div class="svc-row rev">
+      <div class="svc-num">01</div>
+      <div class="svc-name">
+        <div class="svc-title">AI Systems for Researchers</div>
+        <div class="svc-tag">Research Infrastructure</div>
+      </div>
+      <div class="svc-desc"><p>Private, intelligent research infrastructure built to understand your domain and accelerate discovery. Not generic. Not off-the-shelf.</p></div>
+      <ul class="svc-bullets">
+        <li>Private research copilots & knowledge systems</li>
+        <li>RAG pipelines — FAISS, Pinecone, hybrid retrieval</li>
+        <li>Automated literature review & summarization</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d1">
+      <div class="svc-num">02</div>
+      <div class="svc-name">
+        <div class="svc-title">WhatsApp Automation</div>
+        <div class="svc-tag">Conversational AI</div>
+      </div>
+      <div class="svc-desc"><p>Convert conversations into customers — automated flows that qualify, engage, and convert at scale without a single manual message.</p></div>
+      <ul class="svc-bullets">
+        <li>Lead qualification bots with intelligent routing</li>
+        <li>24/7 customer support automation</li>
+        <li>Appointment booking & follow-up systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d2">
+      <div class="svc-num">03</div>
+      <div class="svc-name">
+        <div class="svc-title">Internal Tools for Startups</div>
+        <div class="svc-tag">Ops & Tooling</div>
+      </div>
+      <div class="svc-desc"><p>Ditch off-the-shelf tools that slow you down. Internal systems built to fit exactly how your team works — and that scale with you.</p></div>
+      <ul class="svc-bullets">
+        <li>Admin dashboards & operations tooling</li>
+        <li>Workflow automation & integration layers</li>
+        <li>Custom CRM and data pipeline systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d3">
+      <div class="svc-num">04</div>
+      <div class="svc-name">
+        <div class="svc-title">Full-Stack Web Systems</div>
+        <div class="svc-tag">Platforms & SaaS</div>
+      </div>
+      <div class="svc-desc"><p>Scalable, production-ready platforms engineered for performance. SaaS MVPs to complex web systems — built to convert and built to last.</p></div>
+      <ul class="svc-bullets">
+        <li>SaaS MVPs & product platforms</li>
+        <li>Scalable architecture — Next.js, PostgreSQL</li>
+        <li>High-conversion sites & landing pages</li>
+      </ul>
+    </div>
+
+    <div class="svc-row rev d4">
+      <div class="svc-num">05</div>
+      <div class="svc-name">
+        <div class="svc-title">Healthcare AI Systems</div>
+        <div class="svc-tag">Clinical AI</div>
+      </div>
+      <div class="svc-desc"><p>Clinical-grade AI that improves patient outcomes — built with the rigor, validation standards, and domain depth that healthcare demands.</p></div>
+      <ul class="svc-bullets">
+        <li>Predictive ML for clinical decision support</li>
+        <li>Multimodal AI — imaging, clinical, EHR</li>
+        <li>Risk stratification & early warning systems</li>
+      </ul>
+    </div>
+
+    <div class="svc-row featured rev d5">
+      <div class="svc-num">06</div>
+      <div class="svc-name">
+        <div class="svc-title">Research to Startup Bridge</div>
+        <div class="svc-tag">Featured</div>
+      </div>
+      <div class="svc-desc"><p>Your research deserves to exist in the real world. We translate academic work into deployable, fundable systems — fast.</p></div>
+      <ul class="svc-bullets">
+        <li>Research papers into deployable products</li>
+        <li>MVP development for academic labs & institutes</li>
+        <li>Commercialization strategy + rapid prototyping</li>
+        <li>Prototype-to-product engineering pipelines</li>
+      </ul>
+    </div>
+
+    <div class="svc-row featured rev d6">
+      <div class="svc-num">07</div>
+      <div class="svc-name">
+        <div class="svc-title">Data + AI Consulting</div>
+        <div class="svc-tag">Featured</div>
+      </div>
+      <div class="svc-desc"><p>Turn your raw data into a strategic asset. From messy CSVs to decision intelligence systems — we extract value where others see noise.</p></div>
+      <ul class="svc-bullets">
+        <li>Data analysis, modeling & actionable insights</li>
+        <li>Predictive modeling & forecasting</li>
+        <li>Customer segmentation & behavior intelligence</li>
+        <li>Decision intelligence infrastructure</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section id="capabilities">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">What We Build</div>
+      <h2 class="s-title">End-to-End<br><em>Engineering</em></h2>
+    </div>
+    <p class="s-desc">We own the full build — architecture to production. No handoffs. No fragmentation. One team that ships.</p>
+  </div>
+  <div class="caps-grid">
+    <div class="cap-cell rev">
+      <div class="cap-num">01 / Delivery</div>
+      <div class="cap-title">Idea to Deployment</div>
+      <p class="cap-body">We own the full lifecycle — requirements, architecture, development, and production deployment. No handoffs, no fragmentation, no vague timelines.</p>
+    </div>
+    <div class="cap-cell rev d1">
+      <div class="cap-num">02 / Integration</div>
+      <div class="cap-title">AI + Engineering as One</div>
+      <p class="cap-body">ML models don't live in notebooks. We integrate AI directly into production systems — real APIs, real data pipelines, real scale. Intelligence built-in from day one.</p>
+    </div>
+    <div class="cap-cell rev d2">
+      <div class="cap-num">03 / Architecture</div>
+      <div class="cap-title">Scalable by Design</div>
+      <p class="cap-body">Systems designed to grow with you. Distributed backends, efficient vector stores, and cloud-native deployments that handle real load without technical debt.</p>
+    </div>
+    <div class="cap-cell rev d3">
+      <div class="cap-num">04 / Experience</div>
+      <div class="cap-title">Production-Proven</div>
+      <p class="cap-body">We've deployed healthcare AI, research tooling, and automation systems in live production environments. We know what breaks — and how to prevent it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">Why Tarqon</div>
+      <h2 class="s-title">Elite Technical<br><em>Execution</em></h2>
+    </div>
+    <p class="s-desc">We are not a dev shop. We are not a no-code agency. We are engineers who build systems that work.</p>
+  </div>
+  <div class="why-split">
+    <div class="why-col-l rev">
+      <ul class="why-items">
+        <li class="why-item">
+          <span class="why-idx">01</span>
+          <div>
+            <div class="why-h">AI-First by Design</div>
+            <p class="why-p">We don't bolt AI on — it's the foundation. Every system is architected with intelligence as a core component, not a feature added at the end.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">02</span>
+          <div>
+            <div class="why-h">Research-Grade Systems</div>
+            <p class="why-p">Our work is grounded in rigorous ML research and applied science — not off-the-shelf models with a polished UI on top.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">03</span>
+          <div>
+            <div class="why-h">Fast Execution</div>
+            <p class="why-p">From scoping to production, our engineering velocity is built for startups and researchers who can't afford to wait three quarters for a prototype.</p>
+          </div>
+        </li>
+        <li class="why-item">
+          <span class="why-idx">04</span>
+          <div>
+            <div class="why-h">Custom-Built, Always</div>
+            <p class="why-p">No templates. No generic solutions. Every system is engineered from scratch for your specific requirements, constraints, and goals.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="why-col-r rev d2">
+      <div class="why-statement">
+        Deep technical expertise.<br><em>Real-world outcomes.</em><br>No shortcuts.
+      </div>
+      <div class="why-quote">
+        <div class="why-quote-label">Our Commitment</div>
+        <p>"Every system we ship is built to solve a real problem — not to impress at a demo. We measure success by the outcomes our clients achieve, not the lines of code we write."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">The Builder</div>
+      <h2 class="s-title">Meet the<br><em>Engineer</em></h2>
+    </div>
+    <p class="s-desc">Tarqon is founder-led. The person you talk to is the person who builds your system.</p>
+  </div>
+  <div class="founder-split">
+    <div class="founder-l rev">
+      <div class="founder-name">Shivansh<br><em>Singh</em></div>
+      <div class="founder-role">Founder & AI Engineer</div>
+      <p class="founder-bio">AI/ML engineer and full-stack developer building systems that work in production — not just in research notebooks. Focused on the hardest intersection of machine learning and real-world engineering.</p>
+      <p class="founder-bio">Deep expertise in multimodal ML, clinical AI, and retrieval-augmented systems. Years spent solving problems where cutting-edge research meets production constraints.</p>
+      <p class="founder-bio">Tarqon Intelligence: one principle — elite technical execution, delivered with the speed and focus modern builders demand.</p>
+      <div class="founder-grid">
+        <div class="fg-cell">
+          <div class="fg-label">Specialization</div>
+          <div class="fg-val">Multimodal AI</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Domain</div>
+          <div class="fg-val">Healthcare AI</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Infrastructure</div>
+          <div class="fg-val">RAG Pipelines</div>
+        </div>
+        <div class="fg-cell">
+          <div class="fg-label">Stack</div>
+          <div class="fg-val">Full-Stack Eng.</div>
+        </div>
+      </div>
+    </div>
+    <div class="founder-r rev d2">
+      <div>
+        <div class="founder-tags-label">Technical Stack & Focus Areas</div>
+        <div class="founder-tags">
+          <span class="f-tag">Multimodal ML</span>
+          <span class="f-tag">RAG / FAISS / Pinecone</span>
+          <span class="f-tag">Clinical AI</span>
+          <span class="f-tag">Next.js</span>
+          <span class="f-tag">PostgreSQL</span>
+          <span class="f-tag">Scalable Deployments</span>
+          <span class="f-tag">LLM Systems</span>
+          <span class="f-tag">Computer Vision</span>
+          <span class="f-tag">XGBoost / Sklearn</span>
+        </div>
+      </div>
+      <div class="founder-pullquote">
+        <p>"I build systems that solve real problems at the intersection of research and production — where most teams give up, we ship."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="cta">
+  <div class="s-header rev">
+    <div>
+      <div class="s-label">Start a Project</div>
+    </div>
+  </div>
+  <div class="cta-split">
+    <div class="cta-l rev">
+      <h2 class="cta-title">Let's build<br>something<br><em>intelligent.</em></h2>
+      <a href="mailto:tarqonintelligence@gmail.com" class="btn-primary">Get in Touch</a>
+    </div>
+    <div class="cta-r rev d2">
+      <p class="cta-sub">Whether you are a researcher, a founder, or an enterprise team — if you have a hard problem and need an intelligent system to solve it, we want to hear from you.</p>
+      <a href="#services" class="btn-ghost">View Services</a>
+      <div class="cta-email">Contact: <a href="mailto:tarqonintelligence@gmail.com">tarqonintelligence@gmail.com</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-brand">Tarqon Intelligence</div>
+  <div class="f-links">
+    <a href="#services">Services</a>
+    <a href="#capabilities">Capabilities</a>
+    <a href="#founder">Founder</a>
+    <a href="mailto:tarqonintelligence@gmail.com">Contact</a>
+  </div>
+  <div class="f-copy">2025 Tarqon Intelligence</div>
+</footer>
+
+<!-- ── CHATBOT HTML (must be before the script) ── -->
+<button id="chat-toggle">💬</button>
+
+<div id="chat-window">
+  <div id="chat-header">
+    <div>
+      <div id="chat-title">Tarqon AI</div>
+      <div id="chat-sub">Ask anything about our services</div>
+    </div>
+    <button id="chat-close">×</button>
+  </div>
+
+  <div id="chat-messages">
+    <div class="bot">
+      👋 Hello!<br><br>
+      I'm Tarqon's AI Assistant.<br><br>
+      I can answer questions about
+      <ul style="margin-top:10px;padding-left:18px;line-height:1.8">
+        <li>AI Development</li>
+        <li>Healthcare AI</li>
+        <li>WhatsApp Automation</li>
+        <li>Research Projects</li>
+        <li>Pricing</li>
+        <li>Founder</li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="suggestions">
+    <div class="suggestion">Services</div>
+    <div class="suggestion">Healthcare AI</div>
+    <div class="suggestion">Founder</div>
+    <div class="suggestion">Contact</div>
+  </div>
+
+  <div id="chat-input-area">
+    <input id="chat-input" placeholder="Ask me anything..." autocomplete="off">
+    <button id="chat-send">➜</button>
+  </div>
+</div>
+
+<!-- ── ALL SCRIPTS ── -->
+<script>
+  // Navbar scroll effect
+  const nb = document.getElementById('nb');
+  window.addEventListener('scroll', () => {
+    nb.classList.toggle('scrolled', window.scrollY > 10);
+  });
+
+  // Hamburger menu toggle
+  const mm = document.getElementById('mm');
+  document.getElementById('hbg').addEventListener('click', () => {
+    mm.classList.toggle('open');
+  });
+
+  // Reveal on scroll
+  const revObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('in');
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -28px 0px' });
+
+  document.querySelectorAll('.rev').forEach(el => revObs.observe(el));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+  // ── CHATBOT ──
+  const chatToggle   = document.getElementById('chat-toggle');
+  const chatWindow   = document.getElementById('chat-window');
+  const chatClose    = document.getElementById('chat-close');
+  const chatInput    = document.getElementById('chat-input');
+  const chatSend     = document.getElementById('chat-send');
+  const chatMessages = document.getElementById('chat-messages');
+
+  let conversation = [];
+
+  chatToggle.onclick = () => { chatWindow.classList.add('open'); chatInput.focus(); };
+  chatClose.onclick  = () => { chatWindow.classList.remove('open'); };
+
+  function scrollBottom() { chatMessages.scrollTop = chatMessages.scrollHeight; }
+
+  function addMessage(text, cls) {
+    const div = document.createElement('div');
+    div.className = cls;
+    div.innerHTML = text;
+    chatMessages.appendChild(div);
+    scrollBottom();
+  }
+
+  function showTyping() {
+    const t = document.createElement('div');
+    t.className = 'typing';
+    t.id = 'typing';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    chatMessages.appendChild(t);
+    scrollBottom();
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('typing');
+    if (t) t.remove();
+  }
+
+  async function askAI(question) {
+    addMessage(question, 'user');
+    conversation.push({ role: 'user', content: question });
+    showTyping();
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: question, history: conversation })
+      });
+      const data = await response.json();
+      removeTyping();
+      addMessage(data.answer, 'bot');
+      conversation.push({ role: 'assistant', content: data.answer });
+    } catch (err) {
+      removeTyping();
+      addMessage('⚠️ Sorry, something went wrong. Please try again.', 'bot');
+    }
+  }
+
+  function sendMessage() {
+    const text = chatInput.value.trim();
+    if (!text) return;
+    chatInput.value = '';
+    askAI(text);
+  }
+
+  chatSend.onclick = sendMessage;
+  chatInput.addEventListener('keypress', e => { if (e.key === 'Enter') sendMessage(); });
+
+  document.querySelectorAll('.suggestion').forEach(btn => {
+    btn.onclick = () => askAI(btn.innerText);
+  });
+</script>
+
+</body>
+</html>

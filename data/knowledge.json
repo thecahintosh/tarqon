@@ -1,0 +1,54 @@
+{
+    "company": {
+      "name": "Tarqon Intelligence",
+      "tagline": "Building Intelligent Systems That Scale",
+      "description": "Tarqon Intelligence is an AI-first engineering company that builds intelligent software systems for startups, researchers, healthcare organizations and enterprises."
+    },
+  
+    "services": [
+      {
+        "name": "AI Systems for Researchers",
+        "description": "Private AI research assistants, RAG systems, literature review automation, scientific search and knowledge systems."
+      },
+      {
+        "name": "WhatsApp Automation",
+        "description": "Lead qualification, customer support, appointment booking and automated business conversations."
+      },
+      {
+        "name": "Internal Tools",
+        "description": "Custom CRMs, admin dashboards, workflow automation and operational software."
+      },
+      {
+        "name": "Full Stack Development",
+        "description": "Production-ready SaaS platforms, scalable web applications and custom software."
+      },
+      {
+        "name": "Healthcare AI",
+        "description": "Clinical decision support, multimodal AI, medical prediction systems and healthcare automation."
+      },
+      {
+        "name": "Research to Startup",
+        "description": "Transforming academic research into deployable products and MVPs."
+      },
+      {
+        "name": "Data & AI Consulting",
+        "description": "Data analysis, predictive modeling, forecasting and decision intelligence."
+      }
+    ],
+  
+    "founder": {
+      "name": "Shivansh Singh",
+      "role": "Founder & AI Engineer",
+      "expertise": [
+        "Multimodal AI",
+        "RAG Systems",
+        "Healthcare AI",
+        "Full Stack Engineering",
+        "Computer Vision"
+      ]
+    },
+  
+    "contact": {
+      "email": "tarqonintelligence@gmail.com"
+    }
+  }
