@@ -1,9 +1,9 @@
 import { Groq } from "groq-sdk";
-import { readFileSync } from "fs";
-import { join, dirname } from "path";
-import { fileURLToPath } from "url";
+import { createRequire } from "module";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const require = createRequire(import.meta.url);
+const knowledge = require("../data/knowledge.json");
+
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export default async function handler(req, res) {
@@ -13,10 +13,6 @@ export default async function handler(req, res) {
 
   try {
     const { message, history = [] } = req.body;
-
-    const knowledge = JSON.parse(
-      readFileSync(join(__dirname, "../data/knowledge.json"), "utf8")
-    );
 
     const completion = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
